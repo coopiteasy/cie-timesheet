@@ -12,6 +12,12 @@
     "website": "www.coopiteasy.be",
     "license": "AGPL-3",
     "depends": ["hr_contract", "hr_timesheet_sheet"],
-    "data": ["views/hr_timesheet_sheet_view.xml", ],
+    "data": [
+        "views/hr_timesheet_sheet_view.xml",
+        "views/hr_employee_view.xml",
+    ],
+    "demo": [
+        "demo/hr_contract_demo.xml",
+    ],
     "installable": True,
 }

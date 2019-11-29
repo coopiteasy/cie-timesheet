@@ -7,26 +7,25 @@
             <field name="model">hr_timesheet_sheet.sheet</field>
             <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form"/>
             <field name="arch" type="xml">
-                <field name="total_difference" position="after">
-                    <field name="hours"/>
-                </field>
-
-                <xpath expr='//notebook' position="inside">
-                    <page string="Overtime">
-                        <field name="sheet_ids">
-                            <tree string="Period">
-                                <field name="name"/>
-                                <field name="total_timesheet" widget="float_time" sum="Timesheets"/>
-                            </tree>
-                        </field>
-
-
-                    </page>
+                <xpath expr="//group/group/label[@for='date_from']" position="before">
+                    <field name="daily_working_hours" widget="float_time"/>
+                    <field name="total_overtime" widget="float_time"/>
                 </xpath>
+
             </field>
         </record>
 
+        <record id="hr_timesheet_sheet_tree_simplified" model="ir.ui.view">
+            <field name="name">hr.timesheet.sheet.tree</field>
+            <field name="model">hr_timesheet_sheet.sheet</field>
+            <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_tree_simplified"/>
 
+            <field name="arch" type="xml">
+                 <xpath expr="//field[@name='date_to']" position="after">
+                    <field name="total_overtime" widget="float_time"/>
+                </xpath>
+            </field>
+        </record>
 
     </data>
 </odoo>
