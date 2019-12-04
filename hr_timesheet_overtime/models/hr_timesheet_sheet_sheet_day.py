@@ -9,4 +9,4 @@ from openerp import api, fields, models, _
 class HrTimesheetSheet(models.Model):
     _inherit = "hr_timesheet_sheet.sheet.day"
 
-    total_overtime = fields.Float('Total Overtime Hours', readonly=True)
+    total_overtime = fields.Float("Total Overtime Hours", readonly=True)
