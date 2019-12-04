@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//group/group/label[@for='date_from']" position="before">
                     <field name="daily_working_hours" widget="float_time"/>
+                    <field name="timesheet_overtime" widget="float_time"/>
                     <field name="total_overtime" widget="float_time"/>
                 </xpath>
 

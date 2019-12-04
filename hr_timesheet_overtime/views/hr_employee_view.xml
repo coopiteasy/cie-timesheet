@@ -9,6 +9,7 @@
                 <group string="Overtime">
                     <field name="initial_overtime" widget="float_time"/>
                     <field name="total_overtime" widget="float_time"/>
+                    <field name="overtime_start_date"/>
                 </group>
             </xpath>
         </field>
