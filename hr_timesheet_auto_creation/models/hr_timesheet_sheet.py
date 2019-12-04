@@ -34,3 +34,28 @@ class HrTimesheetSheet(models.Model):
             vals["employee_id"] = employee_id
             self.sudo().create(vals)
         return True
+
+
+class Followers(models.Model):
+    _inherit = "mail.followers"
+
+    @api.model
+    def create(self, vals):
+        """
+        Fix for IntegrityError: duplicate key value violates unique constraint
+            "mail_followers_mail_followers_res_partner_res_model_id_uniq"
+        Found on https://github.com/odoo/odoo/issues/15589#issuecomment-455635940
+        """
+        if "res_model" in vals and "res_id" in vals and "partner_id" in vals:
+            dups = self.env["mail.followers"].search(
+                [
+                    ("res_model", "=", vals.get("res_model")),
+                    ("res_id", "=", vals.get("res_id")),
+                    ("partner_id", "=", vals.get("partner_id")),
+                ]
+            )
+            if len(dups):
+                for p in dups:
+                    p.unlink()
+        res = super(Followers, self).create(vals)
+        return res
