@@ -3,9 +3,13 @@
 # Copyright 2019 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+import logging
+
 from openerp import api, models
 
 from datetime import datetime, timedelta
+
+_logger = logging.getLogger(__name__)
 
 
 class HrTimesheetSheet(models.Model):
@@ -13,6 +17,7 @@ class HrTimesheetSheet(models.Model):
 
     @api.model
     def create_employee_timesheet(self):
+        _logger.info("[hr_timesheet_auto_creation][create_employee_timesheet]")
         employee_obj = self.env["hr.employee"]
         employee_ids = employee_obj.search(
             [("active", "=", True), ("user_id", "!=", False)]
@@ -33,6 +38,11 @@ class HrTimesheetSheet(models.Model):
         for employee_id in employee_ids:
             vals["employee_id"] = employee_id
             self.sudo().create(vals)
+            _logger.info(
+                "[hr_timesheet_auto_creation] hr_timesheet_sheet.sheet created for employee %s"
+                % employee_id
+            )
+
         return True
 
 
