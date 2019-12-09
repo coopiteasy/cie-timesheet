@@ -3,10 +3,9 @@
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from datetime import datetime
+import datetime
 
 from openerp import api, fields, models, _
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 
 
 class HrTimesheetSheet(models.Model):
@@ -83,19 +82,37 @@ class HrTimesheetSheet(models.Model):
         """
         self.ensure_one()
         if date:
-            date = datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT)
+            date = self._compute_datetime(date)
         total = 0.0
-        contracts = (
-            self.env["hr.contract"]
-            .sudo()
-            .search([("employee_id.id", "=", self.employee_id.id)])
-        )
+        contracts = self.get_contracts(self.employee_id)
         for contract in contracts:
             for calendar in contract.working_hours:
                 for wh in calendar.get_working_hours_of_date(start_dt=date):
                     total += wh
 
         return total
+
+    def get_contracts(self, employee_id):
+        return (
+            self.env["hr.contract"]
+            .sudo()
+            .search([("employee_id.id", "=", employee_id.id)])
+        )
+
+    @api.model
+    def _compute_datetime(self, date):
+        dt = False
+        if date:
+            this_year = datetime.date.today().year
+            reference_date = fields.Datetime.context_timestamp(
+                self.env.user,
+                datetime.datetime(this_year, 1, 1, 12)
+            )
+            dt = fields.Datetime.from_string(date)
+            tz_dt = fields.Datetime.context_timestamp(self.env.user, dt)
+            dt = dt + tz_dt.tzinfo._utcoffset
+            dt = dt - reference_date.tzinfo._utcoffset
+        return dt
 
     def get_total_timesheet_period(self):
         """
@@ -125,7 +142,6 @@ class HrTimesheetSheet(models.Model):
                 ("date", ">=", date_from),
             ]
         )
-
         total_day = {}
         for line in aal:
             if line.date in total_day:
