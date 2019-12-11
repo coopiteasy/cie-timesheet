@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
             <xpath expr="//group[@name='active_group']" position="after">
-                <group string="Overtime">
+                <group string="Overtime" groups="base.group_hr_user">
                     <field name="initial_overtime" widget="float_time"/>
                     <field name="total_overtime" widget="float_time"/>
                     <field name="overtime_start_date"/>
