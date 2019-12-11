@@ -45,7 +45,7 @@ class HrTimesheetSheet(models.Model):
         Computes overtime for the timesheet period
         """
         for sheet in self:
-            ts_overtime = sheet.employee_id.initial_overtime
+            ts_overtime = 0.0
             total_timesheet_period = sheet.get_total_timesheet_period()
             for date in total_timesheet_period:
                 daily_wh = sheet.get_working_hours(date=date)
