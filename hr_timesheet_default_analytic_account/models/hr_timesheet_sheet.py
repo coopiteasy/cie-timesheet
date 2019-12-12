@@ -30,7 +30,7 @@ class HrTimesheetSheet(models.Model):
             "amount": 0,
             "date": date,
             "is_timesheet": "True",
-            "name": "",
+            "name": "/",
             "sheet_id": sheet_id,
             "unit_amount": 0,
             "user_id": user_id.id,
