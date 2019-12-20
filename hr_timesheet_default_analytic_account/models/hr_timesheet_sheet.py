@@ -27,7 +27,7 @@ class HrTimesheetSheet(models.Model):
     def _prepare_analytic_line(self, date, account, sheet_id, user_id):
         return {
             "account_id": account.id,
-            "amount": 0,
+            "amount": 0.0,
             "date": date,
             "is_timesheet": "True",
             "name": "/",
