@@ -3,7 +3,7 @@
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import datetime
+from collections import defaultdict
 
 from openerp import api, fields, models, _
 
@@ -21,6 +21,7 @@ class HrTimesheetSheet(models.Model):
     timesheet_overtime = fields.Float(
         "Timesheet Overtime",
         readonly=True,
+        store=True,
         compute="_compute_timesheet_overtime",
         help="Overtime for this timesheet period",
     )
@@ -28,11 +29,11 @@ class HrTimesheetSheet(models.Model):
     total_overtime = fields.Float(
         "Overtime Total",
         readonly=True,
+        store=True,
         compute="_compute_total_overtime",
         help="Overtime total since employee's overtime start date",
     )
 
-    @api.depends("employee_id")
     def _compute_daily_working_hours(self):
         """
         Computes working hours for the current day according to employee's contracts
@@ -54,7 +55,6 @@ class HrTimesheetSheet(models.Model):
 
             sheet.timesheet_overtime = ts_overtime
 
-    @api.depends("employee_id", "period_ids", "timesheet_ids")
     def _compute_total_overtime(self):
         """
         Computes total overtime since employee's overtime start date
@@ -81,14 +81,14 @@ class HrTimesheetSheet(models.Model):
         @return: total of working hours
         """
         self.ensure_one()
+        start_dt = None
         if date:
-            date = self._compute_datetime(date)
+            start_dt = fields.Datetime.from_string(date)
         total = 0.0
         contracts = self.get_contracts(self.employee_id)
         for contract in contracts:
             for calendar in contract.working_hours:
-                for wh in calendar.get_working_hours_of_date(start_dt=date):
-                    total += wh
+                total += sum(wh for wh in calendar.get_working_hours_of_date(start_dt=start_dt))
 
         return total
 
@@ -99,24 +99,10 @@ class HrTimesheetSheet(models.Model):
             .search([("employee_id.id", "=", employee_id.id)])
         )
 
-    @api.model
-    def _compute_datetime(self, date):
-        dt = False
-        if date:
-            this_year = datetime.date.today().year
-            reference_date = fields.Datetime.context_timestamp(
-                self.env.user,
-                datetime.datetime(this_year, 1, 1, 12)
-            )
-            dt = fields.Datetime.from_string(date)
-            tz_dt = fields.Datetime.context_timestamp(self.env.user, dt)
-            dt = dt + tz_dt.tzinfo._utcoffset
-            dt = dt - reference_date.tzinfo._utcoffset
-        return dt
-
     def get_total_timesheet_period(self):
         """
-        Get total_timesheet for each sheet of the timesheet period
+        Get total_timesheet from hr_timesheet_sheet.sheet.day
+        for each day of the timesheet period
         @return: dictionary {'date':'total_timesheet'}
         """
         self.ensure_one()
@@ -131,7 +117,8 @@ class HrTimesheetSheet(models.Model):
 
     def get_worked_hours_per_day(self, date_from):
         """
-        Get total of worked hours since a given date
+        Get total of worked hours from account analytic lines
+        since a given date
         @param date_from: string object
         @return: dictionary {'date':'worked hours'}
         """
@@ -142,12 +129,9 @@ class HrTimesheetSheet(models.Model):
                 ("date", ">=", date_from),
             ]
         )
-        total_day = {}
+        total_day = defaultdict(float)
         for line in aal:
-            if line.date in total_day:
-                total_day[line.date] += line.unit_amount
-            else:
-                total_day[line.date] = line.unit_amount
+            total_day[line.date] += line.unit_amount
         return total_day
 
     def write_hr_employee(self, overtime):
