@@ -38,12 +38,12 @@ class HrTimesheetSheet(models.Model):
 
     @api.model
     def create(self, vals):
-        res = super(HrTimesheetSheet, self).create(vals)
+        ts = super(HrTimesheetSheet, self).create(vals)
 
-        date_from = res["date_from"]
-        date_to = res["date_to"]
-        employee_id = res["employee_id"]
-        sheet_id = res["id"]
+        date_from = ts.date_from
+        date_to = ts.date_to
+        employee_id = ts.employee_id
+        sheet_id = ts.id
 
         days = self.get_number_days_between_dates(date_from, date_to)
         for day in range(days):
@@ -54,5 +54,5 @@ class HrTimesheetSheet(models.Model):
                 aal_dict = self._prepare_analytic_line(
                     datetime_current, account, sheet_id, employee_id.user_id
                 )
-                res.write({"timesheet_ids": [(0, 0, aal_dict)]})
-        return res
+                ts.write({"timesheet_ids": [(0, 0, aal_dict)]})
+        return ts
