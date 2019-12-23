@@ -20,8 +20,8 @@ class HrTimesheetSheet(models.Model):
 
     timesheet_overtime = fields.Float(
         "Timesheet Overtime",
-        readonly=True,
         store=True,
+        readonly=True,
         compute="_compute_timesheet_overtime",
         help="Overtime for this timesheet period",
     )
@@ -29,7 +29,6 @@ class HrTimesheetSheet(models.Model):
     total_overtime = fields.Float(
         "Overtime Total",
         readonly=True,
-        store=True,
         compute="_compute_total_overtime",
         help="Overtime total since employee's overtime start date",
     )
@@ -41,7 +40,7 @@ class HrTimesheetSheet(models.Model):
         for sheet in self:
             sheet.daily_working_hours = sheet.get_working_hours()
 
-    @api.depends("timesheet_ids", "period_ids")
+    @api.depends("timesheet_ids.unit_amount", "timesheet_ids.date")
     def _compute_timesheet_overtime(self):
         """
         Computes overtime for the timesheet period
@@ -57,7 +56,8 @@ class HrTimesheetSheet(models.Model):
             sheet.timesheet_overtime = ts_overtime
 
     @api.depends(
-        "timesheet_ids",
+        "timesheet_ids.unit_amount",
+        "timesheet_ids.date",
         "employee_id.initial_overtime",
         "employee_id.overtime_start_date",
     )
