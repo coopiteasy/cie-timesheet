@@ -18,6 +18,7 @@ class HrEmployee(models.Model):
     total_overtime = fields.Float(
         string="Total Overtime",
         default=0.0,
+        readonly=True,
         help="Total Overtime since Overtime Start Date",
     )
 
