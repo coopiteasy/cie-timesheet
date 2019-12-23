@@ -41,6 +41,7 @@ class HrTimesheetSheet(models.Model):
         for sheet in self:
             sheet.daily_working_hours = sheet.get_working_hours()
 
+    @api.depends('timesheet_ids', 'period_ids')
     def _compute_timesheet_overtime(self):
         """
         Computes overtime for the timesheet period
@@ -55,6 +56,7 @@ class HrTimesheetSheet(models.Model):
 
             sheet.timesheet_overtime = ts_overtime
 
+    @api.depends('timesheet_ids', 'employee_id.initial_overtime', 'employee_id.overtime_start_date')
     def _compute_total_overtime(self):
         """
         Computes total overtime since employee's overtime start date
