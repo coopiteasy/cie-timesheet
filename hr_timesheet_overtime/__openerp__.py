@@ -8,7 +8,6 @@
     "version": "9.0.1.0.0",
     "category": "Human Resources",
     "summary": """Overtime Calculation""",
-    "description": """Computes overtime hours according to employee's contracts""",
     "author": "Coop IT Easy SCRLfs, Odoo Community Association (OCA)",
     "website": "www.coopiteasy.be",
     "license": "AGPL-3",
