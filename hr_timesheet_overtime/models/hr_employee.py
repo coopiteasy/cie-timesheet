@@ -19,6 +19,7 @@ class HrEmployee(models.Model):
         string="Total Overtime",
         default=0.0,
         readonly=True,
+        compute="_compute_total_overtime",
         help="Total Overtime since Overtime Start Date",
     )
 
@@ -28,3 +29,18 @@ class HrEmployee(models.Model):
         default=time.strftime("%Y-01-01"),
         help="Overtime Start Date to compute overtime",
     )
+
+    @api.multi
+    def _compute_total_overtime(self):
+        """
+        Computes total overtime since employee's overtime start date
+        """
+        for employee in self:
+            sheets = self.env["hr_timesheet_sheet.sheet"].search(
+                [
+                    ("employee_id", "=", employee.id),
+                    ("date_from", ">", employee.overtime_start_date),
+                ]
+            )
+            overtime = sum(sheet.timesheet_overtime for sheet in sheets)
+            employee.total_overtime = employee.initial_overtime + overtime

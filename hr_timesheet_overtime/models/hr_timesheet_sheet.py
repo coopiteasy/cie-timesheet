@@ -30,7 +30,7 @@ class HrTimesheetSheet(models.Model):
     total_overtime = fields.Float(
         "Overtime Total",
         readonly=True,
-        compute="_compute_total_overtime",
+        related="employee_id.total_overtime",
         help="Overtime total since employee's overtime start date",
     )
 
@@ -49,37 +49,13 @@ class HrTimesheetSheet(models.Model):
         for sheet in self:
             ts_overtime = 0.0
             total_timesheet_period = sheet.get_total_timesheet_period()
-            for date in total_timesheet_period:
-                daily_wh = sheet.get_working_hours(date=date)
-                daily_overtime = total_timesheet_period[date] - daily_wh
-                ts_overtime += daily_overtime
+            for date, total_timesheet in total_timesheet_period.items():
+                if date >= sheet.employee_id.overtime_start_date:
+                    daily_wh = sheet.get_working_hours(date=date)
+                    daily_overtime = total_timesheet - daily_wh
+                    ts_overtime += daily_overtime
 
             sheet.timesheet_overtime = ts_overtime
-
-    @api.depends(
-        "timesheet_ids.unit_amount",
-        "timesheet_ids.date",
-        "employee_id.initial_overtime",
-        "employee_id.overtime_start_date",
-    )
-    def _compute_total_overtime(self):
-        """
-        Computes total overtime since employee's overtime start date
-        """
-        for sheet in self:
-            current_overtime = sheet.employee_id.initial_overtime
-            overtime_start_date = sheet.employee_id.overtime_start_date
-
-            total_timesheet_day = sheet.get_worked_hours_per_day(
-                overtime_start_date
-            )
-            for date in total_timesheet_day:
-                daily_wh = sheet.get_working_hours(date=date)
-                daily_overtime = total_timesheet_day[date] - daily_wh
-                current_overtime += daily_overtime
-
-            sheet.write_hr_employee(current_overtime)
-            sheet.total_overtime = current_overtime
 
     def get_working_hours(self, date=None):
         """
