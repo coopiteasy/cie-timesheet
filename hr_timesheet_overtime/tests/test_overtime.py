@@ -4,7 +4,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from openerp.tests.common import TransactionCase
-from openerp import exceptions
+from openerp.fields import Date
+from datetime import date
 
 
 class TestOvertime(TransactionCase):
@@ -60,6 +61,7 @@ class TestOvertime(TransactionCase):
         self.ts1 = self.env["hr_timesheet_sheet.sheet"].create(ts1_dict)
 
         # create and link aal
+        # monday
         self.env["account.analytic.line"].create(
             {
                 "account_id": self.analytic_account_01.id,
@@ -68,10 +70,24 @@ class TestOvertime(TransactionCase):
                 "is_timesheet": "True",
                 "name": "/",
                 "sheet_id": self.ts1.id,
-                "unit_amount": 10.0,
+                "unit_amount": 10.0,  # 1 hour overtime
                 "user_id": self.employee1.user_id.id,
             }
         )
+        # tuesday -> friday
+        for day in range(3, 7):
+            self.env["account.analytic.line"].create(
+                {
+                    "account_id": self.analytic_account_01.id,
+                    "amount": 0.0,
+                    "date": Date.to_string(date(2019, 12, day)),
+                    "is_timesheet": "True",
+                    "name": "/",
+                    "sheet_id": self.ts1.id,
+                    "unit_amount": 9.0,  # expected time
+                    "user_id": self.employee1.user_id.id,
+                }
+            )
 
     def test_overtime_01(self):
         """
@@ -98,3 +114,47 @@ class TestOvertime(TransactionCase):
 
         self.assertEqual(self.ts1.timesheet_overtime, 1)
         self.assertEqual(self.ts1.total_overtime, 11)
+
+    def test_overtime_04(self):
+        """
+        Worker did not work on a day he was expected to work on.
+        """
+        ts2 = self.env["hr_timesheet_sheet.sheet"].create(
+            {
+                "employee_id": self.employee1.id,
+                "date_from": "2019-12-09",
+                "date_to": "2019-12-15",
+            }
+        )
+
+        # create and link aal
+        # monday
+        self.env["account.analytic.line"].create(
+            {
+                "account_id": self.analytic_account_01.id,
+                "amount": 0.0,
+                "date": "2019-12-09",
+                "is_timesheet": "True",
+                "name": "/",
+                "sheet_id": ts2.id,
+                "unit_amount": 10.0,  # 1 hour overtime
+                "user_id": self.employee1.user_id.id,
+            }
+        )
+        # tuesday -> thursday
+        for day in range(10, 13):
+            self.env["account.analytic.line"].create(
+                {
+                    "account_id": self.analytic_account_01.id,
+                    "amount": 0.0,
+                    "date": Date.to_string(date(2019, 12, day)),
+                    "is_timesheet": "True",
+                    "name": "/",
+                    "sheet_id": ts2.id,
+                    "unit_amount": 9.0,  # expected time
+                    "user_id": self.employee1.user_id.id,
+                }
+            )
+
+        self.assertEqual(ts2.timesheet_overtime, -8)
+        self.assertEqual(ts2.total_overtime, -7)

@@ -6,6 +6,7 @@
 from collections import defaultdict
 
 from openerp import api, fields, models, _
+from datetime import timedelta
 
 
 class HrTimesheetSheet(models.Model):
@@ -124,7 +125,16 @@ class HrTimesheetSheet(models.Model):
                 ("sheet_id.date_to", "<=", self.date_to),
             ]
         )
-        return {ts.name: ts.total_timesheet for ts in ts_day}
+        date_to = fields.Date.from_string(self.date_to)
+        date_from = fields.Date.from_string(self.date_from)
+
+        nb_days = (date_to - date_from).days + 1
+        periods = {
+            fields.Date.to_string(date_from + timedelta(days=d)): 0.0
+            for d in range(0, nb_days)
+        }
+        periods.update({ts.name: ts.total_timesheet for ts in ts_day})
+        return periods
 
     def get_worked_hours_per_day(self, date_from):
         """
