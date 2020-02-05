@@ -5,7 +5,7 @@
 
 from datetime import datetime, timedelta
 
-from openerp import api, fields, models, _
+from openerp import api, models
 
 
 class HrTimesheetSheet(models.Model):

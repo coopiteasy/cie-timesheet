@@ -8,7 +8,8 @@
     "version": "9.0.1.0.0",
     "category": "Human Resources",
     "summary": """
-    When creating a timesheet, adds for the period analytical lines linked to an employee's default analytic accounts
+    When creating a timesheet, adds for the period analytical
+    lines linked to an employee's default analytic accounts.
     """,
     "author": "Coop IT Easy SCRLfs, Odoo Community Association (OCA)",
     "website": "www.coopiteasy.be",
