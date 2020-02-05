@@ -5,7 +5,7 @@
 
 from collections import defaultdict
 
-from openerp import api, fields, models, _
+from openerp import api, fields, models
 from datetime import timedelta
 
 
