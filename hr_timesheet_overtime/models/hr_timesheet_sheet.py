@@ -3,8 +3,6 @@
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from collections import defaultdict
-
 from openerp import api, fields, models
 from datetime import timedelta
 
@@ -19,9 +17,15 @@ class HrTimesheetSheet(models.Model):
         help="Hours to work for the current day",
     )
 
+    daily_overtime = fields.Float(
+        "Daily Overtime",
+        readonly=True,
+        compute="_compute_daily_overtime",
+        help="Overtime for the current day",
+    )
+
     timesheet_overtime = fields.Float(
         "Timesheet Overtime",
-        store=True,
         readonly=True,
         compute="_compute_timesheet_overtime",
         help="Overtime for this timesheet period",
@@ -34,29 +38,47 @@ class HrTimesheetSheet(models.Model):
         help="Overtime total since employee's overtime start date",
     )
 
+    @api.multi
     def _compute_daily_working_hours(self):
         """
         Computes working hours for the current day according to employee's contracts
         """
+        current_day = fields.Date.today()
         for sheet in self:
-            sheet.daily_working_hours = sheet.get_working_hours()
+            sheet.daily_working_hours = sheet.get_working_hours(
+                date=current_day
+            )
 
-    @api.depends("timesheet_ids.unit_amount", "timesheet_ids.date")
+    @api.multi
+    def _compute_daily_overtime(self):
+        """
+        Computes overtime for the current day
+        """
+        current_day = fields.Date.today()
+        for sheet in self:
+            working_hours = sheet.get_working_hours(date=current_day)
+            worked_hours = sheet.get_worked_hours(current_day)
+            sheet.daily_overtime = worked_hours - working_hours
+
+    @api.multi
     def _compute_timesheet_overtime(self):
         """
         Computes overtime for the timesheet period
+        (from the start date to the current date not included)
         """
+        current_day = fields.Date.today()
         for sheet in self:
             ts_overtime = 0.0
             total_timesheet_period = sheet.get_total_timesheet_period()
             for date, total_timesheet in total_timesheet_period.items():
-                if date >= sheet.employee_id.overtime_start_date:
+                if current_day > date >= sheet.employee_id.overtime_start_date:
                     daily_wh = sheet.get_working_hours(date=date)
                     daily_overtime = total_timesheet - daily_wh
                     ts_overtime += daily_overtime
 
             sheet.timesheet_overtime = ts_overtime
 
+    @api.multi
     def get_working_hours(self, date=None):
         """
         Get the working hours for a given date according to employee's contracts
@@ -77,7 +99,6 @@ class HrTimesheetSheet(models.Model):
                         start_dt=start_dt
                     )
                 )
-
         return total
 
     def get_contracts(self, employee_id):
@@ -87,6 +108,7 @@ class HrTimesheetSheet(models.Model):
             .search([("employee_id.id", "=", employee_id.id)])
         )
 
+    @api.multi
     def get_total_timesheet_period(self):
         """
         Get total_timesheet from hr_timesheet_sheet.sheet.day
@@ -112,34 +134,20 @@ class HrTimesheetSheet(models.Model):
         periods.update({ts.name: ts.total_timesheet for ts in ts_day})
         return periods
 
-    def get_worked_hours_per_day(self, date_from):
+    def get_worked_hours(self, date):
         """
         Get total of worked hours from account analytic lines
-        since a given date
-        @param date_from: string object
-        @return: dictionary {'date':'worked hours'}
+        for a given date
+        @param date: string object
+        @return: total of worked hours
         """
         self.ensure_one()
+        worked_hours = 0.0
         aal = self.env["account.analytic.line"].search(
             [
                 ("user_id.id", "=", self.employee_id.user_id.id),
-                ("date", ">=", date_from),
+                ("date", "=", date),
             ]
         )
-        total_day = defaultdict(float)
-        for line in aal:
-            total_day[line.date] += line.unit_amount
-        return total_day
-
-    def write_hr_employee(self, overtime):
-        """
-        Writes total_overtime in hr.employee model
-        @param overtime: float object
-        """
-        self.ensure_one()
-        (
-            self.env["hr.employee"]
-            .sudo()
-            .search([("user_id.id", "=", self.employee_id.user_id.id)])
-            .write({"total_overtime": overtime})
-        )
+        worked_hours += sum(line.unit_amount for line in aal)
+        return worked_hours
