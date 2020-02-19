@@ -101,7 +101,7 @@ class TestOvertime(TransactionCase):
         """
         Change overtime start date
         """
-        self.employee1.write({"overtime_start_date": "2019-12-04"})
+        self.employee1.write({"overtime_start_date": "2019-12-02"})
 
         self.assertEqual(self.ts1.timesheet_overtime, 1)
         self.assertEqual(self.ts1.total_overtime, 0)
