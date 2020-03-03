@@ -103,7 +103,7 @@
             <field name="type_id" ref="hr_contract.hr_contract_type_emp"/>
             <field name="working_hours" ref="working_hours_part_time1"/>
             <field name="wage" eval="0.0"/>
-            <field name="date_start" eval="time.strftime('%Y-%m')+'-1'"/>
+            <field name="date_start" eval="time.strftime('%Y')+'-01-01'"/>
             <field name="date_end" eval="time.strftime('%Y')+'-12-31'"/>
         </record>
 
@@ -115,7 +115,7 @@
             <field name="type_id" ref="hr_contract.hr_contract_type_emp"/>
             <field name="working_hours" ref="working_hours_part_time2"/>
             <field name="wage" eval="0.0"/>
-            <field name="date_start" eval="time.strftime('%Y-%m')+'-1'"/>
+            <field name="date_start" eval="time.strftime('%Y')+'-01-01'"/>
             <field name="date_end" eval="time.strftime('%Y')+'-12-31'"/>
         </record>
 

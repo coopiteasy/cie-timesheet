@@ -45,9 +45,7 @@ class HrTimesheetSheet(models.Model):
         """
         current_day = fields.Date.today()
         for sheet in self:
-            sheet.daily_working_hours = sheet.get_working_hours(
-                date=current_day
-            )
+            sheet.daily_working_hours = sheet.get_working_hours(current_day)
 
     @api.multi
     def _compute_daily_overtime(self):
@@ -56,7 +54,7 @@ class HrTimesheetSheet(models.Model):
         """
         current_day = fields.Date.today()
         for sheet in self:
-            working_hours = sheet.get_working_hours(date=current_day)
+            working_hours = sheet.get_working_hours(current_day)
             worked_hours = sheet.get_worked_hours(current_day)
             sheet.daily_overtime = worked_hours - working_hours
 
@@ -72,40 +70,45 @@ class HrTimesheetSheet(models.Model):
             total_timesheet_period = sheet.get_total_timesheet_period()
             for date, total_timesheet in total_timesheet_period.items():
                 if current_day > date >= sheet.employee_id.overtime_start_date:
-                    daily_wh = sheet.get_working_hours(date=date)
+                    daily_wh = sheet.get_working_hours(date)
                     daily_overtime = total_timesheet - daily_wh
                     ts_overtime += daily_overtime
 
             sheet.timesheet_overtime = ts_overtime
 
     @api.multi
-    def get_working_hours(self, date=None):
+    def get_working_hours(self, date):
         """
         Get the working hours for a given date according to employee's contracts
         @param date: string object
         @return: total of working hours
         """
         self.ensure_one()
-        start_dt = None
-        if date:
-            start_dt = fields.Datetime.from_string(date)
+        date_dt = fields.Datetime.from_string(date)
         total = 0.0
-        contracts = self.get_contracts(self.employee_id)
+        contracts = self.get_contracts(date)
         for contract in contracts:
             for calendar in contract.working_hours:
                 total += sum(
                     wh
-                    for wh in calendar.get_working_hours_of_date(
-                        start_dt=start_dt
+                    for wh in calendar.get_working_hours(
+                        start_dt=date_dt.replace(hour=0, minute=0, second=0),
+                        end_dt=date_dt.replace(hour=23, minute=59, second=59)
                     )
                 )
         return total
 
-    def get_contracts(self, employee_id):
+    def get_contracts(self, date):
         return (
             self.env["hr.contract"]
-            .sudo()
-            .search([("employee_id.id", "=", employee_id.id)])
+                .sudo()
+                .search(
+                [
+                    ("employee_id.id", "=", self.employee_id.id),
+                    # ("state", '!=', "close"),
+                    #("date_start", '<=', date)
+                ]
+            )
         )
 
     @api.multi
