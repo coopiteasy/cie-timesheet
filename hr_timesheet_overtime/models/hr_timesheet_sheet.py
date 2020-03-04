@@ -2,9 +2,12 @@
 # Copyright 2019 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+import logging
 
 from openerp import api, fields, models
 from datetime import timedelta
+
+_logger = logging.getLogger(__name__)
 
 
 class HrTimesheetSheet(models.Model):
@@ -91,24 +94,31 @@ class HrTimesheetSheet(models.Model):
             for calendar in contract.working_hours:
                 total += sum(
                     wh
-                    for wh in calendar.get_working_hours(
+                    for wh in calendar.get_working_hours_of_date(
                         start_dt=date_dt.replace(hour=0, minute=0, second=0),
-                        end_dt=date_dt.replace(hour=23, minute=59, second=59)
+                        end_dt=date_dt.replace(hour=23, minute=59, second=59),
+                        resource_id=calendar.id,
                     )
                 )
         return total
 
     def get_contracts(self, date):
+        """
+        Get employee's contracts whose given date is included
+        in the start date and the end date (defined or not) of the contract
+        @param date: string object
+        @return: hr.contract object
+        """
         return (
             self.env["hr.contract"]
-                .sudo()
-                .search(
+            .sudo()
+            .search(
                 [
                     ("employee_id.id", "=", self.employee_id.id),
-                    # ("state", '!=', "close"),
-                    #("date_start", '<=', date)
+                    ("date_start", "<=", date),
                 ]
             )
+            .filtered(lambda r: r.date_end >= date or not r.date_end)
         )
 
     @api.multi

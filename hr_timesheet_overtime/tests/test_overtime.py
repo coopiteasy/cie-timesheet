@@ -43,6 +43,7 @@ class TestOvertime(TransactionCase):
             "employee_id": self.employee1.id,
             "wage": 0.0,
             "working_hours": calendar.id,
+            "date_start": "2019-01-01",
         }
 
         self.contract1 = self.env["hr.contract"].create(contract_dict)
@@ -61,7 +62,7 @@ class TestOvertime(TransactionCase):
         self.ts1 = self.env["hr_timesheet_sheet.sheet"].create(ts1_dict)
 
         # create and link aal
-        # monday
+        # monday 02/12/2019
         self.env["account.analytic.line"].create(
             {
                 "account_id": self.analytic_account_01.id,
@@ -74,7 +75,7 @@ class TestOvertime(TransactionCase):
                 "user_id": self.employee1.user_id.id,
             }
         )
-        # tuesday -> friday
+        # tuesday 03/12/2019 -> friday 06/12/2019
         for day in range(3, 7):
             self.env["account.analytic.line"].create(
                 {
@@ -158,3 +159,79 @@ class TestOvertime(TransactionCase):
 
         self.assertEqual(ts2.timesheet_overtime, -8)
         self.assertEqual(ts2.total_overtime, -7)
+
+    def test_overtime_05(self):
+        """
+        Multiple contracts
+        """
+
+        # end previous contract
+        self.contract1.date_end = "2020-01-06"
+
+        # create new contract
+        # working hours : half-time
+        calendar = self.env["resource.calendar"].create({"name": "Calendar"})
+        for day in range(5):  # from monday to friday
+            self.env["resource.calendar.attendance"].create(
+                {
+                    "name": "Attendance",
+                    "dayofweek": str(day),
+                    "hour_from": "09",
+                    "hour_to": "13",
+                    "calendar_id": calendar[0].id,
+                }
+            )
+
+        # contracts
+        contract_dict = {
+            "name": "Contract 2",
+            "employee_id": self.employee1.id,
+            "wage": 0.0,
+            "working_hours": calendar.id,
+            "date_start": "2020-01-07",
+        }
+
+        self.contract2 = self.env["hr.contract"].create(contract_dict)
+
+        # create ts
+        ts2_dict = {
+            "employee_id": self.employee1.id,
+            "date_from": "2020-01-06",
+            "date_to": "2020-01-12",
+        }
+        self.ts2 = self.env["hr_timesheet_sheet.sheet"].create(ts2_dict)
+
+        # create and link aal
+        # monday
+        self.env["account.analytic.line"].create(
+            {
+                "account_id": self.analytic_account_01.id,
+                "amount": 0.0,
+                "date": "2020-01-06",
+                "is_timesheet": "True",
+                "name": "/",
+                "sheet_id": self.ts2.id,
+                "unit_amount": 9.0,  # expected time from previous contract
+                "user_id": self.employee1.user_id.id,
+            }
+        )
+
+        # tuesday 07/01/2020 -> friday 10/01/2020
+        for day in range(7, 11):
+            self.env["account.analytic.line"].create(
+                {
+                    "account_id": self.analytic_account_01.id,
+                    "amount": 0.0,
+                    "date": Date.to_string(date(2020, 01, day)),
+                    "is_timesheet": "True",
+                    "name": "/",
+                    "sheet_id": self.ts2.id,
+                    "unit_amount": 4.0,  # expected time from new contract
+                    "user_id": self.employee1.user_id.id,
+                }
+            )
+
+        self.assertEqual(self.ts2.timesheet_overtime, 0)
+        self.assertEqual(
+            self.ts2.total_overtime, 1
+        )  # 1 hour overtime from ts1
