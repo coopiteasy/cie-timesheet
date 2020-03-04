@@ -28,20 +28,3 @@ class ResourceOvertime(models.Model):
         string="Workgroup Manager",
         default=lambda self: self.env.uid,
     )
-
-    # ---------------
-    # Utility methods
-    # ---------------
-
-    @api.multi
-    def get_rate_for_weekday(self, day_dt):
-        """ Given a day datetime, return matching rate """
-        self.ensure_one()
-        weekday = day_dt.weekday()
-        rates = self.env["resource.overtime.rate"]
-
-        for rate in self.rate_ids.filtered(
-            lambda rate: int(rate.dayofweek) == weekday
-        ):
-            rates |= rate
-        return rates
