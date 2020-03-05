@@ -153,12 +153,10 @@ class HrTimesheetSheet(models.Model):
         @return: total of worked hours
         """
         self.ensure_one()
-        worked_hours = 0.0
         aal = self.env["account.analytic.line"].search(
             [
                 ("user_id.id", "=", self.employee_id.user_id.id),
                 ("date", "=", date),
             ]
         )
-        worked_hours += sum(line.unit_amount for line in aal)
-        return worked_hours
+        return sum(line.unit_amount for line in aal)
