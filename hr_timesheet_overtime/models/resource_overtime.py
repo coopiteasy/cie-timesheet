@@ -14,8 +14,8 @@ class ResourceOvertime(models.Model):
 
     # Relational fields
     rate_ids = fields.One2many(
-        "resource.overtime.rate",
-        "overtime_id",
+        comodel_name="resource.overtime.rate",
+        inverse_name="overtime_id",
         string="Overtime Rate",
         copy=True,
     )
