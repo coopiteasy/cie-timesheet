@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2019 Coop IT Easy SCRLfs
+# Copyright 2020 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
@@ -13,27 +13,25 @@ _logger = logging.getLogger(__name__)
 class HrTimesheetSheet(models.Model):
     _inherit = "hr_timesheet_sheet.sheet"
 
+    # Numeric fields
     daily_working_hours = fields.Float(
         "Daily Working Hours",
         readonly=True,
         compute="_compute_daily_working_hours",
         help="Hours to work for the current day",
     )
-
     daily_overtime = fields.Float(
         "Daily Overtime",
         readonly=True,
         compute="_compute_daily_overtime",
         help="Overtime for the current day",
     )
-
     timesheet_overtime = fields.Float(
         "Timesheet Overtime",
         readonly=True,
         compute="_compute_timesheet_overtime",
         help="Overtime for this timesheet period",
     )
-
     total_overtime = fields.Float(
         "Overtime Total",
         readonly=True,

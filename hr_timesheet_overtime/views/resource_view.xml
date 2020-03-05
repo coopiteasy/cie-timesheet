@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright 2020 Coop IT Easy
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
 <odoo>
 
     <record id="view_resource_overtime_search" model="ir.ui.view">
@@ -85,6 +89,5 @@
               id="menu_resource_overtime"
               parent="resource.menu_resource_config"
               sequence="4"/>
-
 
 </odoo>

@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+# Copyright 2020 Coop IT Easy SCRLfs
+#   - Vincent Van Rossem <vincent@coopiteasy.be>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from openerp import models, api, fields
 
 
@@ -6,6 +10,7 @@ class ResourceOvertimeRate(models.Model):
     _description = "Rate detail"
     _order = "dayofweek"
 
+    # String fields
     name = fields.Char(required=True)
     dayofweek = fields.Selection(
         [
@@ -21,6 +26,8 @@ class ResourceOvertimeRate(models.Model):
         required=True,
         index=True,
     )
+
+    # Numeric fields
     rate = fields.Float("Rate", default="1.00", digits=(3, 2))
     overtime_id = fields.Many2one(
         "resource.overtime",
