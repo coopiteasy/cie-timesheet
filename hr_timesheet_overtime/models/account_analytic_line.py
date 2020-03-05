@@ -31,7 +31,7 @@ class AnalyticLine(models.Model):
         """
         Update values if date or unit_amount fields have changed
         """
-        if values.get("date") or values.get("unit_amount"):
+        if "date" in values or "unit_amount" in values:
             date = values.get("date", self.date)
             unit_amount = values.get("unit_amount", self.unit_amount)
 
