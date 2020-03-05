@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
-# Copyright 2019 Coop IT Easy SCRLfs
+# Copyright 2020 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import time
+
 from openerp import models, api, fields
 
 
 class HrEmployee(models.Model):
     _inherit = "hr.employee"
 
+    # Numeric fields
     initial_overtime = fields.Float(
         string="Initial Overtime",
         default=0.0,
         help="Initial Overtime to start Overtime Start Date with",
     )
-
     total_overtime = fields.Float(
         string="Total Overtime",
         default=0.0,
@@ -23,6 +24,7 @@ class HrEmployee(models.Model):
         help="Total Overtime since Overtime Start Date",
     )
 
+    # Date fields
     overtime_start_date = fields.Date(
         string="Overtime Start Date",
         required=True,

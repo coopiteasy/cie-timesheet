@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+# Copyright 2020 Coop IT Easy SCRLfs
+#   - Vincent Van Rossem <vincent@coopiteasy.be>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
 
 from openerp import models, fields, api
@@ -24,6 +28,9 @@ class AnalyticLine(models.Model):
 
     @api.model
     def _update_values(self, values):
+        """
+        Update values if date or unit_amount fields have changed
+        """
         if values.get("date") or values.get("unit_amount"):
             date = values.get("date")
             unit_amount = values.get("unit_amount", self.unit_amount)

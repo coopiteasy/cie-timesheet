@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-# Copyright 2019 Coop IT Easy SCRLfs
+# Copyright 2020 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-
 from openerp.tests.common import TransactionCase
 from openerp.fields import Date
 from datetime import date
