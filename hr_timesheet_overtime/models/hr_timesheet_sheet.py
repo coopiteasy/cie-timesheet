@@ -69,10 +69,10 @@ class HrTimesheetSheet(models.Model):
         for sheet in self:
             ts_overtime = 0.0
             total_timesheet_period = sheet.get_total_timesheet_period()
-            for date, total_timesheet in total_timesheet_period.items():
+            for date, total_timesheet_day in total_timesheet_period.items():
                 if sheet.employee_id.overtime_start_date <= date < current_day:
                     daily_wh = sheet.get_working_hours(date)
-                    daily_overtime = total_timesheet - daily_wh
+                    daily_overtime = total_timesheet_day - daily_wh
                     ts_overtime += daily_overtime
 
             sheet.timesheet_overtime = ts_overtime
