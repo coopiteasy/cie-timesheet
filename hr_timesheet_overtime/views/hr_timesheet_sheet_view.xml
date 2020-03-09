@@ -31,4 +31,10 @@
         </field>
     </record>
 
+    <menuitem name="Overtime Rate"
+              id="menu_hr_overtime_rate" sequence="100"
+              parent="hr_attendance.timesheet_menu_root"
+              groups="base.group_hr_manager"
+              action="action_resource_overtime_form"/>
+
 </odoo>
