@@ -23,7 +23,8 @@ class AnalyticLine(models.Model):
 
     @api.multi
     def write(self, values):
-        self._update_values(values)
+        if not self.env.context.get("create"):  # sale module
+            self._update_values(values)
         return super(AnalyticLine, self).write(values)
 
     @api.model
