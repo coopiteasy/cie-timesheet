@@ -32,6 +32,28 @@ class HrEmployee(models.Model):
         help="Overtime Start Date to compute overtime",
     )
 
+    has_overtime_access = fields.Boolean(
+        string="Has access to overtime page",
+        compute="_compute_has_overtime_access",
+    )
+
+    @api.multi
+    def _compute_has_overtime_access(self):
+        for rec in self:
+            has_access = False
+            if self.env.user.has_group(
+                "base.group_hr_manager"
+            ) or self.env.user.has_group("base.group_hr_user"):
+                has_access = True
+            elif (
+                rec.user_id.employee_ids.parent_id.id
+                == self.env.user.employee_ids.id
+            ):
+                has_access = True
+            elif rec.user_id == self.env.user:
+                has_access = True
+            rec.has_overtime_access = has_access
+
     @api.multi
     def _compute_total_overtime(self):
         """
