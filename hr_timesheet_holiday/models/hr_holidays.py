@@ -78,6 +78,17 @@ class HrHolidays(models.Model):
             self.env["hr.contract"]
             .sudo()
             .search([("employee_id.id", "=", employee.id)])
+            .filtered(
+                lambda r: (
+                    fields.Date.from_string(r.date_start)
+                    <= fields.Date.from_string(self.date_from)
+                )
+                and (
+                    not r.date_end
+                    or fields.Date.from_string(self.date_to)
+                    <= fields.Date.from_string(r.date_end)
+                )
+            )
         )
         for contract in contracts:
             for calendar in contract.working_hours:
