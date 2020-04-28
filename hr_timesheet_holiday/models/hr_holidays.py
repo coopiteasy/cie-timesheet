@@ -73,15 +73,31 @@ class HrHolidays(models.Model):
         elif date.date() == to_dt.date():
             start_dt = date.replace(hour=0, minute=0, second=0, microsecond=0)
             end_dt = to_dt
+        else:
+            start_dt = date.replace(hour=0, minute=0, second=0, microsecond=0)
+            end_dt = date.replace(
+                hour=23, minute=59, second=59, microsecond=999999
+            )
         hours_per_day = 0.0
         contracts = (
             self.env["hr.contract"]
             .sudo()
             .search([("employee_id.id", "=", employee.id)])
+            .filtered(
+                lambda r: (
+                    fields.Date.from_string(r.date_start)
+                    <= fields.Date.from_string(self.date_from)
+                )
+                and (
+                    not r.date_end
+                    or fields.Date.from_string(self.date_to)
+                    <= fields.Date.from_string(r.date_end)
+                )
+            )
         )
         for contract in contracts:
             for calendar in contract.working_hours:
-                working_hours = calendar.get_working_hours_of_date(
+                working_hours = calendar.get_working_hours(
                     start_dt=start_dt, end_dt=end_dt
                 )
                 hours_per_day += sum(wh for wh in working_hours)
