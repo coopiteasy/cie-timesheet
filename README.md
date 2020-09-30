@@ -18,6 +18,7 @@ Available addons
 ----------------
 addon | version | summary
 --- | --- | ---
+[hr_timesheet_tag](hr_timesheet_tag/) | 12.0.1.0.0 | Tag your timesheet activity.
 
 [//]: # (end addons)
 <!-- prettier-ignore-end -->
