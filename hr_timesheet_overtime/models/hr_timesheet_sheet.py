@@ -13,6 +13,7 @@ _logger = logging.getLogger(__name__)
 class HrTimesheetSheet(models.Model):
     _inherit = "hr_timesheet_sheet.sheet"
 
+    active = fields.Boolean("Active", default=True)
     # Numeric fields
     daily_working_hours = fields.Float(
         "Daily Working Hours",
