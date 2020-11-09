@@ -130,6 +130,7 @@ class HrTimesheetSheet(models.Model):
         self.ensure_one()
         ts_day = self.env["hr_timesheet_sheet.sheet.day"].search(
             [
+                ("sheet_id.active", "=", True),
                 ("sheet_id.employee_id.id", "=", self.employee_id.id),
                 ("sheet_id.date_from", ">=", self.date_from),
                 ("sheet_id.date_to", "<=", self.date_to),
