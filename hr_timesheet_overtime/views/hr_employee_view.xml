@@ -25,16 +25,4 @@
             </xpath>
         </field>
     </record>
-
-    <record id="hr_timesheet_overtime_view_employee_tree" model="ir.ui.view">
-        <field name="name">hr.employee.tree</field>
-        <field name="model">hr.employee</field>
-        <field name="inherit_id" ref="hr.view_employee_tree"/>
-        <field name="arch" type="xml">
-            <field name="work_email" position="after">
-                <field name="total_overtime" widget="float_time" groups="analytic.group_analytic_accounting"
-                       type="char"/>
-            </field>
-        </field>
-    </record>
 </odoo>
