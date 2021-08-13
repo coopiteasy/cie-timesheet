@@ -5,7 +5,7 @@
 
 from odoo.tests import common
 
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 
 
 class TestHrTimesheetSheet(common.TransactionCase):
@@ -13,7 +13,7 @@ class TestHrTimesheetSheet(common.TransactionCase):
         super().setUp()
         self.env["hr.employee"].search([]).write({"user_id": False})
         self.tms_obj = self.env["hr_timesheet.sheet"]
-        today = datetime.now()
+        today = date.today()
         self.monday = today + timedelta(days=-today.weekday())
         self.sunday = self.monday + timedelta(days=+6)
 
@@ -32,8 +32,8 @@ class TestHrTimesheetSheet(common.TransactionCase):
             {
                 "name": "TMS - 1",
                 "employee_id": employee_id,
-                "date_start": self.monday.strftime("%Y-%m-%d"),
-                "date_end": self.sunday.strftime("%Y-%m-%d"),
+                "date_start": self.monday,
+                "date_end": self.sunday,
             }
         )
 
@@ -43,8 +43,8 @@ class TestHrTimesheetSheet(common.TransactionCase):
         tms = self.tms_obj.search(
             [
                 ("employee_id", "=", self.employee2.id),
-                ("date_end", ">=", self.monday),
-                ("date_end", "<=", self.sunday),
+                ("date_start", "=", self.monday),
+                ("date_end", "=", self.sunday),
             ],
             limit=1,
         )

@@ -7,7 +7,7 @@
     "summary": """
 Automatic Timesheet will add a cron job for create the time sheet.
     """,
-    "version": "11.0.1.0.0",
+    "version": "12.0.1.0.0",
     "category": "Human Resources",
     "author": "Coop IT Easy SCRLfs, Elico Corp, Odoo Community Association (OCA)",
     "license": "AGPL-3",
