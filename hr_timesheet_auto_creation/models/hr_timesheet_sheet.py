@@ -2,11 +2,11 @@
 # Copyright 2019 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
 import logging
+from datetime import date, timedelta
 
 from odoo import api, models
-
-from datetime import date, timedelta
 
 _logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class HrTimesheetSheet(models.Model):
         ).ids
         today = date.today()
         monday = today + timedelta(days=-today.weekday())
-        sunday = monday + timedelta(days=+6)
+        sunday = monday + timedelta(days=6)
         # Search for existing timesheet
         exists_timesheet_records = self.search([("date_end", ">=", monday)])
         ignore_employee_ids = map(
