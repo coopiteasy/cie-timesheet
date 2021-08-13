@@ -6,9 +6,9 @@
             <field name="name">My current TMS</field>
             <field name="interval_number">1</field>
             <field name="interval_type">weeks</field>
-            <field name="nextcall" eval="(DateTime.now() +
-            timedelta(days= +(7-DateTime.now().weekday()))).
-            strftime('%Y-%m-%d 05:00:00')"/>
+            <field name="nextcall" eval="(datetime.now() +
+            timedelta(days=-datetime.now().weekday(), weeks=1))
+            .replace(hour=5, minute=0, second=0, microsecond=0)"/>
             <field name="numbercall">-1</field>
             <field name="active" eval="True"/>
             <field name="doall" eval="True"/>

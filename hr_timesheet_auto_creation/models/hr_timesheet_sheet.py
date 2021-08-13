@@ -6,7 +6,7 @@ import logging
 
 from odoo import api, models
 
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 
 _logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ class HrTimesheetSheet(models.Model):
         employee_ids = employee_obj.search(
             [("active", "=", True), ("user_id", "!=", False)]
         ).ids
-        today = datetime.now()
+        today = date.today()
         monday = today + timedelta(days=-today.weekday())
         sunday = monday + timedelta(days=+6)
         # Search for existing timesheet
@@ -31,8 +31,8 @@ class HrTimesheetSheet(models.Model):
         )
         employee_ids = list(set(employee_ids) - set(ignore_employee_ids))
         vals = {
-            "date_start": monday.strftime("%Y-%m-%d"),
-            "date_end": sunday.strftime("%Y-%m-%d"),
+            "date_start": monday,
+            "date_end": sunday,
         }
         for employee_id in employee_ids:
             vals["employee_id"] = employee_id
