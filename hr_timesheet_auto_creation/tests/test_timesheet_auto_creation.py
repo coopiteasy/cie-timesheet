@@ -3,9 +3,9 @@
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo.tests import common
-
 from datetime import date, timedelta
+
+from odoo.tests import common
 
 
 class TestHrTimesheetSheet(common.TransactionCase):
@@ -15,7 +15,7 @@ class TestHrTimesheetSheet(common.TransactionCase):
         self.tms_obj = self.env["hr_timesheet.sheet"]
         today = date.today()
         self.monday = today + timedelta(days=-today.weekday())
-        self.sunday = self.monday + timedelta(days=+6)
+        self.sunday = self.monday + timedelta(days=6)
 
         self.user1 = self.env.ref("base.user_root").copy({"login": "test1"})
         self.employee1 = self.env.ref("hr.employee_ngh")
