@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2016-2017 Elico Corp (https://www.elico-corp.com)
 # Copyright 2019 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
@@ -11,9 +10,9 @@ from datetime import datetime, timedelta
 
 class TestHrTimesheetSheet(common.TransactionCase):
     def setUp(self):
-        super(TestHrTimesheetSheet, self).setUp()
+        super().setUp()
         self.env["hr.employee"].search([]).write({"user_id": False})
-        self.tms_obj = self.env["hr_timesheet_sheet.sheet"]
+        self.tms_obj = self.env["hr_timesheet.sheet"]
         today = datetime.now()
         self.monday = today + timedelta(days=-today.weekday())
         self.sunday = self.monday + timedelta(days=+6)
@@ -33,8 +32,8 @@ class TestHrTimesheetSheet(common.TransactionCase):
             {
                 "name": "TMS - 1",
                 "employee_id": employee_id,
-                "date_from": self.monday.strftime("%Y-%m-%d"),
-                "date_to": self.sunday.strftime("%Y-%m-%d"),
+                "date_start": self.monday.strftime("%Y-%m-%d"),
+                "date_end": self.sunday.strftime("%Y-%m-%d"),
             }
         )
 
@@ -44,8 +43,8 @@ class TestHrTimesheetSheet(common.TransactionCase):
         tms = self.tms_obj.search(
             [
                 ("employee_id", "=", self.employee2.id),
-                ("date_to", ">=", self.monday),
-                ("date_to", "<=", self.sunday),
+                ("date_end", ">=", self.monday),
+                ("date_end", "<=", self.sunday),
             ],
             limit=1,
         )
