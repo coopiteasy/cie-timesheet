@@ -39,8 +39,7 @@ class HrTimesheetSheet(models.Model):
             self.sudo().create(vals)
             _logger.info(
                 "[hr_timesheet_auto_creation] hr_timesheet.sheet "
-                "created for employee %s "
-                % employee_id
+                "created for employee %s " % employee_id
             )
 
         return True
