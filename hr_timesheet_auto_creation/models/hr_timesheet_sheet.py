@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2016-2017 Elico Corp (https://www.elico-corp.com)
 # Copyright 2019 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
@@ -13,7 +12,7 @@ _logger = logging.getLogger(__name__)
 
 
 class HrTimesheetSheet(models.Model):
-    _inherit = "hr_timesheet_sheet.sheet"
+    _inherit = "hr_timesheet.sheet"
 
     @api.model
     def create_employee_timesheet(self):
@@ -26,20 +25,20 @@ class HrTimesheetSheet(models.Model):
         monday = today + timedelta(days=-today.weekday())
         sunday = monday + timedelta(days=+6)
         # Search for existing timesheet
-        exists_timesheet_records = self.search([("date_to", ">=", monday)])
+        exists_timesheet_records = self.search([("date_end", ">=", monday)])
         ignore_employee_ids = map(
             lambda x: x.employee_id.id, exists_timesheet_records
         )
         employee_ids = list(set(employee_ids) - set(ignore_employee_ids))
         vals = {
-            "date_from": monday.strftime("%Y-%m-%d"),
-            "date_to": sunday.strftime("%Y-%m-%d"),
+            "date_start": monday.strftime("%Y-%m-%d"),
+            "date_end": sunday.strftime("%Y-%m-%d"),
         }
         for employee_id in employee_ids:
             vals["employee_id"] = employee_id
             self.sudo().create(vals)
             _logger.info(
-                "[hr_timesheet_auto_creation] hr_timesheet_sheet.sheet "
+                "[hr_timesheet_auto_creation] hr_timesheet.sheet "
                 "created for employee %s "
                 % employee_id
             )
@@ -68,5 +67,5 @@ class Followers(models.Model):
             if len(dups):
                 for p in dups:
                     p.unlink()
-        res = super(Followers, self).create(vals)
+        res = super().create(vals)
         return res
