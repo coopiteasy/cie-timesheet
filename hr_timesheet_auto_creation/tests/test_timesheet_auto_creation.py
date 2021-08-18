@@ -20,32 +20,28 @@ class TestHrTimesheetSheet(common.TransactionCase):
         self.user1 = self.env.ref("base.user_root").copy({"login": "test1"})
         self.employee1 = self.env.ref("hr.employee_ngh")
         self.employee1.user_id = self.user1.id
-        self._create_timesheet_sheet(self.employee1.id)
 
         self.user2 = self.user1.copy({"login": "test2"})
         self.employee2 = self.env.ref("hr.employee_vad").copy(
             {"user_id": self.user2.id}
         )
 
-    def _create_timesheet_sheet(self, employee_id):
-        self.tms_obj.sudo().create(
-            {
-                "name": "TMS - 1",
-                "employee_id": employee_id,
-                "date_start": self.monday,
-                "date_end": self.sunday,
-            }
-        )
-
     def test_create_employee_timesheet(self):
         """Check timesheet has been created automatically for the week."""
+        conditions = [
+            ("employee_id", "in", (self.employee1.id, self.employee2.id)),
+            ("date_start", "=", self.monday),
+            ("date_end", "=", self.sunday),
+        ]
+        # test that no matching timesheets exist yet.
+        tms = self.tms_obj.search(conditions)
+        self.assertEqual(len(tms), 0)
         self.tms_obj.create_employee_timesheet()
-        tms = self.tms_obj.search(
-            [
-                ("employee_id", "=", self.employee2.id),
-                ("date_start", "=", self.monday),
-                ("date_end", "=", self.sunday),
-            ],
-            limit=1,
-        )
-        self.assertEqual(tms.employee_id, self.employee2)
+        # test that the timesheets have correctly been created.
+        tms = self.tms_obj.search(conditions)
+        self.assertEqual(len(tms), 2)
+        self.tms_obj.create_employee_timesheet()
+        # test that no extra timesheets have been created, because they
+        # already exist.
+        tms = self.tms_obj.search(conditions)
+        self.assertEqual(len(tms), 2)
