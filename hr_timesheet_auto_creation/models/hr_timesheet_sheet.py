@@ -22,6 +22,11 @@ class HrTimesheetSheet(models.Model):
             [("active", "=", True), ("user_id", "!=", False)]
         ).ids
         today = date.today()
+        # FIXME: this assumes weekly time sheets with weeks starting on
+        # monday. the hr_timesheet_sheet module allows to configure the
+        # default sheet range and the week start day (sheet_range and
+        # timesheet_week_start company properties). this should be used
+        # instead.
         monday = today + timedelta(days=-today.weekday())
         sunday = monday + timedelta(days=6)
         # Search for existing timesheet
