@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2019 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
@@ -9,7 +8,7 @@ from odoo.exceptions import Warning as UserError
 
 class TestHrTimesheetDefaultAnalyticAccount(TransactionCase):
     def setUp(self):
-        super(TestHrTimesheetDefaultAnalyticAccount, self).setUp()
+        super().setUp()
 
         # projects
         self.project_01 = self.env["project.project"].create(
@@ -28,13 +27,11 @@ class TestHrTimesheetDefaultAnalyticAccount(TransactionCase):
 
         ts_unlinked_employee_dict = {
             "employee_id": unlinked_employee.id,
-            "date_from": "2019-12-09",
-            "date_to": "2019-12-15",
+            "date_start": "2019-12-09",
+            "date_end": "2019-12-15",
         }
         with self.assertRaises(UserError):
-            self.env["hr_timesheet_sheet.sheet"].create(
-                ts_unlinked_employee_dict
-            )
+            self.env["hr_timesheet.sheet"].create(ts_unlinked_employee_dict)
 
     def test_timesheet_creation_01(self):
         # user
@@ -60,10 +57,10 @@ class TestHrTimesheetDefaultAnalyticAccount(TransactionCase):
         # timesheet
         ts_01_dict = {
             "employee_id": employee_01.id,
-            "date_from": "2019-12-09",
-            "date_to": "2019-12-15",
+            "date_start": "2019-12-09",
+            "date_end": "2019-12-15",
         }
-        ts_01 = self.env["hr_timesheet_sheet.sheet"].create(ts_01_dict)
+        ts_01 = self.env["hr_timesheet.sheet"].create(ts_01_dict)
 
         self.assertEqual(len(ts_01.timesheet_ids), 0)
 
@@ -98,9 +95,9 @@ class TestHrTimesheetDefaultAnalyticAccount(TransactionCase):
         # timesheet
         ts_02_dict = {
             "employee_id": employee_02.id,
-            "date_from": "2019-12-09",
-            "date_to": "2019-12-15",
+            "date_start": "2019-12-09",
+            "date_end": "2019-12-15",
         }
-        ts_02 = self.env["hr_timesheet_sheet.sheet"].create(ts_02_dict)
+        ts_02 = self.env["hr_timesheet.sheet"].create(ts_02_dict)
 
         self.assertEqual(len(ts_02.timesheet_ids), 14)
