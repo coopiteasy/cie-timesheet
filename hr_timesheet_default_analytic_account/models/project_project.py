@@ -5,9 +5,9 @@
 from odoo import models, fields
 
 
-class HrEmployee(models.Model):
-    _inherit = "hr.employee"
+class Project(models.Model):
+    _inherit = "project.project"
 
-    project_ids = fields.Many2many(
-        comodel_name="project.project", string="Projects"
+    employee_ids = fields.Many2many(
+        comodel_name="hr.employee", string="Employees"
     )

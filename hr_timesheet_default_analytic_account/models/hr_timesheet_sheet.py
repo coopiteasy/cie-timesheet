@@ -7,7 +7,7 @@ from datetime import timedelta
 from odoo import api, models
 
 
-class HrTimesheetSheet(models.Model):
+class Sheet(models.Model):
     _inherit = "hr_timesheet.sheet"
 
     def get_number_days_between_dates(self, date_start, date_end):
