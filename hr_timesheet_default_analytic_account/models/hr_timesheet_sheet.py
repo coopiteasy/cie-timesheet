@@ -12,29 +12,18 @@ class Sheet(models.Model):
 
     def get_number_days_between_dates(self, date_start, date_end):
         """
-        Returns number of days between two dates
-        @param date_start: date object
-        @param date_end: date object
-        @return: integer
+        Return the number of days between two dates, including both of them.
+
+        Arguments:
+            date_start (date): start date
+            date_end (date): end date
+
+        Returns:
+            int: the number of days between the provided dates
         """
         difference = date_end - date_start
         # return result and add a day
         return difference.days + 1
-
-    def _prepare_analytic_line(self, date, project, sheet_id, user_id):
-        return {
-            "project_id": project.id,
-            "amount": 0.0,
-            "date": date,
-            # this used to be "/", but this is now a special string considered
-            # by the hr_timesheet_sheet module as an empty line. when a
-            # timesheet is saved, any line with "/" as description and 0 time
-            # is removed.
-            "name": "-",
-            "sheet_id": sheet_id,
-            "unit_amount": 0,
-            "user_id": user_id.id,
-        }
 
     @api.model
     def create(self, vals):
@@ -54,3 +43,18 @@ class Sheet(models.Model):
                 )
                 ts.write({"timesheet_ids": [(0, 0, aal_dict)]})
         return ts
+
+    def _prepare_analytic_line(self, date, project, sheet_id, user_id):
+        return {
+            "project_id": project.id,
+            "amount": 0.0,
+            "date": date,
+            # this used to be "/", but this is now a special string considered
+            # by the hr_timesheet_sheet module as an empty line. when a
+            # timesheet is saved, any line with "/" as description and 0 time
+            # is removed.
+            "name": "-",
+            "sheet_id": sheet_id,
+            "unit_amount": 0,
+            "user_id": user_id.id,
+        }
