@@ -2,7 +2,7 @@
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from odoo import api, models
 
@@ -13,13 +13,11 @@ class HrTimesheetSheet(models.Model):
     def get_number_days_between_dates(self, date_start, date_end):
         """
         Returns number of days between two dates
-        @param date_start: string object
-        @param date_end: string object
+        @param date_start: date object
+        @param date_end: date object
         @return: integer
         """
-        datetime_from = datetime.strptime(date_start, "%Y-%m-%d")
-        datetime_to = datetime.strptime(date_end, "%Y-%m-%d")
-        difference = datetime_to - datetime_from
+        difference = date_end - date_start
         # return result and add a day
         return difference.days + 1
 
@@ -49,12 +47,10 @@ class HrTimesheetSheet(models.Model):
 
         days = self.get_number_days_between_dates(date_start, date_end)
         for day in range(days):
-            datetime_current = (
-                datetime.strptime(date_start, "%Y-%m-%d") + timedelta(days=day)
-            ).strftime("%Y-%m-%d")
+            date_current = date_start + timedelta(days=day)
             for project in employee_id.project_ids:
                 aal_dict = self._prepare_analytic_line(
-                    datetime_current, project, sheet_id, employee_id.user_id
+                    date_current, project, sheet_id, employee_id.user_id
                 )
                 ts.write({"timesheet_ids": [(0, 0, aal_dict)]})
         return ts
