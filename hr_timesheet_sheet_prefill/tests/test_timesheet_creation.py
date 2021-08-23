@@ -6,7 +6,7 @@ from odoo.exceptions import Warning as UserError
 from odoo.tests.common import TransactionCase
 
 
-class TestHrTimesheetDefaultAnalyticAccount(TransactionCase):
+class TestHrTimesheetSheetPrefill(TransactionCase):
     def setUp(self):
         super().setUp()
 
