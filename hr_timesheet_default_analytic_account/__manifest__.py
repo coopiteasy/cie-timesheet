@@ -11,10 +11,9 @@
     lines linked to an employee's default analytic accounts.
     """,
     "author": "Coop IT Easy SCRLfs, Odoo Community Association (OCA)",
-    "website": "www.coopiteasy.be",
+    "website": "https://coopiteasy.be",
     "license": "AGPL-3",
     "depends": ["hr_timesheet_sheet"],
     "data": ["views/hr_employee_view.xml"],
     "demo": ["demo/default_analytic_account_demo.xml"],
-    "installable": True,
 }
