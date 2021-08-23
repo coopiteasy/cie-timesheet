@@ -5,7 +5,7 @@
 
 from datetime import datetime, timedelta
 
-from openerp import api, models
+from odoo import api, models
 
 
 class HrTimesheetSheet(models.Model):
@@ -24,12 +24,11 @@ class HrTimesheetSheet(models.Model):
         # return result and add a day
         return difference.days + 1
 
-    def _prepare_analytic_line(self, date, account, sheet_id, user_id):
+    def _prepare_analytic_line(self, date, project, sheet_id, user_id):
         return {
-            "account_id": account.id,
+            "project_id": project.id,
             "amount": 0.0,
             "date": date,
-            "is_timesheet": "True",
             "name": "/",
             "sheet_id": sheet_id,
             "unit_amount": 0,
@@ -50,9 +49,9 @@ class HrTimesheetSheet(models.Model):
             datetime_current = (
                 datetime.strptime(date_from, "%Y-%m-%d") + timedelta(days=day)
             ).strftime("%Y-%m-%d")
-            for account in employee_id.analytic_account_ids:
+            for project in employee_id.project_ids:
                 aal_dict = self._prepare_analytic_line(
-                    datetime_current, account, sheet_id, employee_id.user_id
+                    datetime_current, project, sheet_id, employee_id.user_id
                 )
                 ts.write({"timesheet_ids": [(0, 0, aal_dict)]})
         return ts

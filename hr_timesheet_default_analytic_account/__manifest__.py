@@ -5,7 +5,7 @@
 
 {
     "name": "Default analytic accounts upon timesheet creation",
-    "version": "9.0.1.0.0",
+    "version": "10.0.1.0.0",
     "category": "Human Resources",
     "summary": """
     When creating a timesheet, adds for the period analytical

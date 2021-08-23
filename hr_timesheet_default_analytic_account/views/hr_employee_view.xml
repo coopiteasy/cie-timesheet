@@ -8,8 +8,8 @@
             <xpath expr="//page[@name='public']" position="after">
                 <page string="Timesheet">
                     <group>
-                        <group string="Default Analytic Accounts">
-                            <field name="analytic_account_ids" widget="many2many_tags"/>
+                        <group string="Default Projects">
+                            <field name="project_ids" widget="many2many_tags"/>
                         </group>
                     </group>
                 </page>

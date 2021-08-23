@@ -3,11 +3,11 @@
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, fields
+from odoo import models, fields
 
 
-class AccountAnalyticAccount(models.Model):
-    _inherit = "account.analytic.account"
+class Project(models.Model):
+    _inherit = "project.project"
 
     employee_ids = fields.Many2many(
         comodel_name="hr.employee", string="Employees"

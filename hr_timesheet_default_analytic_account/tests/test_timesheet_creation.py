@@ -3,20 +3,20 @@
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp.tests.common import TransactionCase
-from openerp.exceptions import Warning as UserError
+from odoo.tests.common import TransactionCase
+from odoo.exceptions import Warning as UserError
 
 
 class TestHrTimesheetDefaultAnalyticAccount(TransactionCase):
     def setUp(self):
         super(TestHrTimesheetDefaultAnalyticAccount, self).setUp()
 
-        # analytic accounts
-        self.analytic_account_01 = self.env["account.analytic.account"].create(
-            {"name": "Analytic Account 01"}
+        # projects
+        self.project_01 = self.env["project.project"].create(
+            {"name": "Project 01"}
         )
-        self.analytic_account_02 = self.env["account.analytic.account"].create(
-            {"name": "Analytic Account 02"}
+        self.project_02 = self.env["project.project"].create(
+            {"name": "Project 02"}
         )
 
     def test_timesheet_creation_fail_linked_employee(self):
@@ -81,11 +81,11 @@ class TestHrTimesheetDefaultAnalyticAccount(TransactionCase):
             "name": "Employee 2",
             "user_id": user_02.id,
             "address_id": user_02.partner_id.id,
-            "analytic_account_ids": [
+            "project_ids": [
                 (
                     6,
                     0,
-                    [self.analytic_account_01.id, self.analytic_account_02.id],
+                    [self.project_01.id, self.project_02.id],
                 )
             ],
         }
