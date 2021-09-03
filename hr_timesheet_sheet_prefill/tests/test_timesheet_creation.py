@@ -2,7 +2,7 @@
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.exceptions import Warning as UserError
+from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 
 
