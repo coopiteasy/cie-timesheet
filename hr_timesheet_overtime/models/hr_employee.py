@@ -62,7 +62,11 @@ class HrEmployee(models.Model):
         for employee in self:
             sheets = (
                 self.env["hr_timesheet_sheet.sheet"]
-                .search([("employee_id", "=", employee.id),])
+                .search(
+                    [
+                        ("employee_id", "=", employee.id),
+                    ]
+                )
                 .filtered(
                     lambda s: s.date_from >= employee.overtime_start_date
                     or employee.overtime_start_date <= s.date_to
