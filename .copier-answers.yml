@@ -4,10 +4,10 @@ _src_path: gh:oca/oca-addons-repo-template
 dependency_installation_mode: PIP
 generate_requirements_txt: true
 include_wkhtmltopdf: false
-odoo_version: 14.0
+odoo_version: 12.0
 rebel_module_groups: []
 repo_description: "TODO: add repo description."
-repo_name: sale-workflow
-repo_slug: sale-workflow
+repo_name: cie-timesheet
+repo_slug: cie-timesheet
 travis_apt_packages: []
 travis_apt_sources: []
