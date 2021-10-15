@@ -2,7 +2,6 @@
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo.tests.common import TransactionCase
-from odoo.fields import Date
 from datetime import date
 
 
@@ -23,7 +22,9 @@ class TestOvertime(TransactionCase):
         self.employee1 = self.env["hr.employee"].create(employee1_dict)
 
         # working hours
-        calendar = self.env["resource.calendar"].create({"name": "Calendar"})
+        # calendar have default attendance_ids, force it to have none.
+        calendar = self.env["resource.calendar"].create(
+            {"name": "Calendar", "attendance_ids": False})
         for day in range(5):
             self.env["resource.calendar.attendance"].create(
                 {
@@ -78,7 +79,7 @@ class TestOvertime(TransactionCase):
                 {
                     "project_id": self.project_01.id,
                     "amount": 0.0,
-                    "date": Date.to_string(date(2019, 12, day)),
+                    "date": date(2019, 12, day),
                     "name": "-",
                     "sheet_id": self.ts1.id,
                     "unit_amount": 9.0,  # expected time
@@ -98,10 +99,51 @@ class TestOvertime(TransactionCase):
         """
         Change overtime start date
         """
-        self.employee1.write({"overtime_start_date": "2019-12-02"})
+        ts2 = self.env["hr_timesheet.sheet"].create(
+            {
+                "employee_id": self.employee1.id,
+                "date_start": "2019-12-09",
+                "date_end": "2019-12-15",
+            }
+        )
 
-        self.assertEqual(self.ts1.timesheet_overtime, 1)
-        self.assertEqual(self.ts1.total_overtime, 0)
+        # create and link aal
+        # monday and tuesday
+        for day in range(9, 11):
+            self.env["account.analytic.line"].create(
+                {
+                    "project_id": self.project_01.id,
+                    "amount": 0.0,
+                    "date": date(2019, 12, day),
+                    "name": "-",
+                    "sheet_id": ts2.id,
+                    "unit_amount": 10.0,  # 1 hour overtime
+                    "user_id": self.employee1.user_id.id,
+                }
+            )
+        # wednesday -> thursday
+        for day in range(10, 13):
+            self.env["account.analytic.line"].create(
+                {
+                    "project_id": self.project_01.id,
+                    "amount": 0.0,
+                    "date": date(2019, 12, day),
+                    "name": "-",
+                    "sheet_id": ts2.id,
+                    "unit_amount": 9.0,  # expected time
+                    "user_id": self.employee1.user_id.id,
+                }
+            )
+
+        self.employee1.write({"overtime_start_date": "2019-12-10"})
+
+        # overtime for any timesheet takes overtime_start_date into account
+        self.assertEqual(self.ts1.timesheet_overtime, 0)
+        # it should start computing on tuesday
+        self.assertEqual(ts2.timesheet_overtime, 1)
+        self.assertEqual(ts2.total_overtime, 1)
+        # total_overtime is just a link to the employee's total overtime
+        self.assertEqual(self.ts1.total_overtime, 1)
 
     def test_overtime_03(self):
         """
@@ -143,7 +185,7 @@ class TestOvertime(TransactionCase):
                 {
                     "project_id": self.project_01.id,
                     "amount": 0.0,
-                    "date": Date.to_string(date(2019, 12, day)),
+                    "date": date(2019, 12, day),
                     "name": "-",
                     "sheet_id": ts2.id,
                     "unit_amount": 9.0,  # expected time
@@ -164,7 +206,8 @@ class TestOvertime(TransactionCase):
 
         # create new contract
         # working hours : half-time
-        calendar = self.env["resource.calendar"].create({"name": "Calendar"})
+        calendar = self.env["resource.calendar"].create(
+            {"name": "Calendar", "attendance_ids": False})
         for day in range(5):  # from monday to friday
             self.env["resource.calendar.attendance"].create(
                 {
@@ -215,7 +258,7 @@ class TestOvertime(TransactionCase):
                 {
                     "project_id": self.project_01.id,
                     "amount": 0.0,
-                    "date": Date.to_string(date(2020, 01, day)),
+                    "date": date(2020, 1, day),
                     "name": "-",
                     "sheet_id": self.ts2.id,
                     "unit_amount": 4.0,  # expected time from new contract

@@ -1,7 +1,7 @@
 # Copyright 2020 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-import time
+from datetime import date
 
 from odoo import models, api, fields
 
@@ -27,7 +27,7 @@ class HrEmployee(models.Model):
     overtime_start_date = fields.Date(
         string="Overtime Start Date",
         required=True,
-        default=time.strftime("%Y-01-01"),
+        default=date.today().replace(month=1, day=1),
         help="Overtime Start Date to compute overtime",
     )
 
@@ -64,11 +64,8 @@ class HrEmployee(models.Model):
                 .search(
                     [
                         ("employee_id", "=", employee.id),
+                        ("date_end", ">=", employee.overtime_start_date),
                     ]
-                )
-                .filtered(
-                    lambda s: s.date_start >= employee.overtime_start_date
-                    or employee.overtime_start_date <= s.date_end
                 )
             )
             overtime = sum(sheet.timesheet_overtime for sheet in sheets)

@@ -98,21 +98,21 @@
 
     <!-- Employee's Contracts -->
 
-    <record id="pieter_parker_contract1" model="hr.contract">
-        <field name="name">Pieter Parker Contract #1</field>
-        <field name="employee_id" ref="hr.employee_root"/>
+    <record id="mitchell_admin_contract1" model="hr.contract">
+        <field name="name">Mitchell Admin Contract #1</field>
+        <field name="employee_id" ref="hr.employee_admin"/>
         <field name="job_id" ref="hr.job_ceo"/>
         <field name="department_id" ref="hr.dep_management"/>
         <field name="type_id" ref="hr_contract.hr_contract_type_emp"/>
         <field name="resource_calendar_id" ref="resource_calendar_part_time1"/>
         <field name="wage" eval="0.0"/>
-        <field name="date_start" eval="time.strftime('%Y')+'-01-01'"/>
-        <field name="date_end" eval="time.strftime('%Y')+'-12-31'"/>
+        <field name="date_start" eval="datetime.now().date().replace(month=1, day=1)"/>
+        <field name="date_end" eval="datetime.now().date().replace(month=12, day=31)"/>
     </record>
 
-    <record id="pieter_parker_contract2" model="hr.contract">
-        <field name="name">Pieter Parker Contract #2</field>
-        <field name="employee_id" ref="hr.employee_root"/>
+    <record id="mitchell_admin_contract2" model="hr.contract">
+        <field name="name">Mitchell Admin Contract #2</field>
+        <field name="employee_id" ref="hr.employee_admin"/>
         <field name="job_id" ref="hr.job_ceo"/>
         <field name="department_id" ref="hr.dep_management"/>
         <field name="type_id" ref="hr_contract.hr_contract_type_emp"/>

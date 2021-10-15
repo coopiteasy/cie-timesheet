@@ -4,7 +4,7 @@
 import logging
 
 from odoo import api, fields, models
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 _logger = logging.getLogger(__name__)
 
@@ -63,13 +63,13 @@ class HrTimesheetSheet(models.Model):
     def _compute_timesheet_overtime(self):
         """
         Computes overtime for the timesheet period
-        (from the start date to the current date not included)
+        (from the start date (included) to the current date (not included))
         """
         current_day = fields.Date.today()
         for sheet in self:
             ts_overtime = 0.0
-            total_timesheet_period = sheet.get_total_timesheet_period()
-            for date, total_timesheet_day in total_timesheet_period.items():
+            total_timesheet_per_day = sheet.get_total_timesheet_per_day()
+            for date, total_timesheet_day in total_timesheet_per_day.items():
                 if sheet.employee_id.overtime_start_date <= date < current_day:
                     daily_wh = sheet.get_working_hours(date)
                     daily_overtime = total_timesheet_day - daily_wh
@@ -85,13 +85,23 @@ class HrTimesheetSheet(models.Model):
         @return: total of working hours
         """
         self.ensure_one()
-        date_dt = fields.Datetime.from_string(date)
+        date_dt = datetime(date.year, date.month, date.day)
         total = 0.0
         contracts = self.get_contracts(date)
         for contract in contracts:
             for calendar in contract.resource_calendar_id:
-                total += calendar.get_day_work_hours_count(date_dt)
+                total += self.get_day_work_hours(date_dt, calendar)
+
         return total
+
+    def get_day_work_hours(self, date_dt, calendar):
+        work_time_per_day = self.employee_id.list_work_time_per_day(
+            date_dt, date_dt + timedelta(days=1), calendar)
+        if not work_time_per_day:
+            return 0.0
+        # .list_work_time_per_day() returns a list of tuples:
+        # (date, work time)
+        return work_time_per_day[0][1]
 
     def get_contracts(self, date):
         """
@@ -105,39 +115,29 @@ class HrTimesheetSheet(models.Model):
             .sudo()
             .search(
                 [
-                    ("employee_id.id", "=", self.employee_id.id),
+                    ("employee_id", "=", self.employee_id.id),
                     ("date_start", "<=", date),
+                    "|", ("date_end", "=", None), ("date_end", ">=", date),
                 ]
             )
-            .filtered(lambda r: r.date_end >= date or not r.date_end)
         )
 
     @api.multi
-    def get_total_timesheet_period(self):
+    def get_total_timesheet_per_day(self):
         """
-        Get total_timesheet from hr_timesheet.sheet.day
-        for each day of the timesheet period
+        Get the total hours for each day of the timesheet period
         @return: dictionary {'date':'total_timesheet'}
         """
         self.ensure_one()
-        ts_day = self.env["hr_timesheet.sheet.day"].search(
-            [
-                ("sheet_id.active", "=", True),
-                ("sheet_id.employee_id.id", "=", self.employee_id.id),
-                ("sheet_id.date_start", ">=", self.date_start),
-                ("sheet_id.date_end", "<=", self.date_end),
-            ]
-        )
-        date_end = fields.Date.from_string(self.date_end)
-        date_start = fields.Date.from_string(self.date_start)
-
-        nb_days = (date_end - date_start).days + 1
-        periods = {
-            fields.Date.to_string(date_start + timedelta(days=d)): 0.0
-            for d in range(0, nb_days)
+        date_start = self.date_start
+        nb_days = (self.date_end - date_start).days + 1
+        totals_per_day = {
+            date_start + timedelta(days=d): 0.0
+            for d in range(nb_days)
         }
-        periods.update({ts.name: ts.total_timesheet for ts in ts_day})
-        return periods
+        for timesheet in self.timesheet_ids:
+            totals_per_day[timesheet.date] += timesheet.unit_amount
+        return totals_per_day
 
     def get_worked_hours(self, date):
         """
