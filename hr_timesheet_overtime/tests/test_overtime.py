@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2020 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
@@ -9,7 +8,7 @@ from datetime import date
 
 class TestOvertime(TransactionCase):
     def setUp(self):
-        super(TestOvertime, self).setUp()
+        super().setUp()
         # users
         user1_dict = {"name": "User 1", "login": "user1", "password": "user1"}
         self.user1 = self.env["res.users"].create(user1_dict)
@@ -41,7 +40,7 @@ class TestOvertime(TransactionCase):
             "name": "Contract 1",
             "employee_id": self.employee1.id,
             "wage": 0.0,
-            "working_hours": calendar.id,
+            "resource_calendar_id": calendar.id,
             "date_start": "2019-01-01",
         }
 
@@ -55,10 +54,10 @@ class TestOvertime(TransactionCase):
         # create ts
         ts1_dict = {
             "employee_id": self.employee1.id,
-            "date_from": "2019-12-02",
-            "date_to": "2019-12-08",
+            "date_start": "2019-12-02",
+            "date_end": "2019-12-08",
         }
-        self.ts1 = self.env["hr_timesheet_sheet.sheet"].create(ts1_dict)
+        self.ts1 = self.env["hr_timesheet.sheet"].create(ts1_dict)
 
         # create and link aal
         # monday 02/12/2019
@@ -67,7 +66,7 @@ class TestOvertime(TransactionCase):
                 "project_id": self.project_01.id,
                 "amount": 0.0,
                 "date": "2019-12-02",
-                "name": "/",
+                "name": "-",
                 "sheet_id": self.ts1.id,
                 "unit_amount": 10.0,  # 1 hour overtime
                 "user_id": self.employee1.user_id.id,
@@ -80,7 +79,7 @@ class TestOvertime(TransactionCase):
                     "project_id": self.project_01.id,
                     "amount": 0.0,
                     "date": Date.to_string(date(2019, 12, day)),
-                    "name": "/",
+                    "name": "-",
                     "sheet_id": self.ts1.id,
                     "unit_amount": 9.0,  # expected time
                     "user_id": self.employee1.user_id.id,
@@ -117,11 +116,11 @@ class TestOvertime(TransactionCase):
         """
         Worker did not work on a day he was expected to work on.
         """
-        ts2 = self.env["hr_timesheet_sheet.sheet"].create(
+        ts2 = self.env["hr_timesheet.sheet"].create(
             {
                 "employee_id": self.employee1.id,
-                "date_from": "2019-12-09",
-                "date_to": "2019-12-15",
+                "date_start": "2019-12-09",
+                "date_end": "2019-12-15",
             }
         )
 
@@ -132,7 +131,7 @@ class TestOvertime(TransactionCase):
                 "project_id": self.project_01.id,
                 "amount": 0.0,
                 "date": "2019-12-09",
-                "name": "/",
+                "name": "-",
                 "sheet_id": ts2.id,
                 "unit_amount": 10.0,  # 1 hour overtime
                 "user_id": self.employee1.user_id.id,
@@ -145,7 +144,7 @@ class TestOvertime(TransactionCase):
                     "project_id": self.project_01.id,
                     "amount": 0.0,
                     "date": Date.to_string(date(2019, 12, day)),
-                    "name": "/",
+                    "name": "-",
                     "sheet_id": ts2.id,
                     "unit_amount": 9.0,  # expected time
                     "user_id": self.employee1.user_id.id,
@@ -182,7 +181,7 @@ class TestOvertime(TransactionCase):
             "name": "Contract 2",
             "employee_id": self.employee1.id,
             "wage": 0.0,
-            "working_hours": calendar.id,
+            "resource_calendar_id": calendar.id,
             "date_start": "2020-01-07",
         }
 
@@ -191,10 +190,10 @@ class TestOvertime(TransactionCase):
         # create ts
         ts2_dict = {
             "employee_id": self.employee1.id,
-            "date_from": "2020-01-06",
-            "date_to": "2020-01-12",
+            "date_start": "2020-01-06",
+            "date_end": "2020-01-12",
         }
-        self.ts2 = self.env["hr_timesheet_sheet.sheet"].create(ts2_dict)
+        self.ts2 = self.env["hr_timesheet.sheet"].create(ts2_dict)
 
         # create and link aal
         # monday
@@ -203,7 +202,7 @@ class TestOvertime(TransactionCase):
                 "project_id": self.project_01.id,
                 "amount": 0.0,
                 "date": "2020-01-06",
-                "name": "/",
+                "name": "-",
                 "sheet_id": self.ts2.id,
                 "unit_amount": 9.0,  # expected time from previous contract
                 "user_id": self.employee1.user_id.id,
@@ -217,7 +216,7 @@ class TestOvertime(TransactionCase):
                     "project_id": self.project_01.id,
                     "amount": 0.0,
                     "date": Date.to_string(date(2020, 01, day)),
-                    "name": "/",
+                    "name": "-",
                     "sheet_id": self.ts2.id,
                     "unit_amount": 4.0,  # expected time from new contract
                     "user_id": self.employee1.user_id.id,

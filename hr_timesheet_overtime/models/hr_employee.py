@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2020 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
@@ -61,15 +60,15 @@ class HrEmployee(models.Model):
         """
         for employee in self:
             sheets = (
-                self.env["hr_timesheet_sheet.sheet"]
+                self.env["hr_timesheet.sheet"]
                 .search(
                     [
                         ("employee_id", "=", employee.id),
                     ]
                 )
                 .filtered(
-                    lambda s: s.date_from >= employee.overtime_start_date
-                    or employee.overtime_start_date <= s.date_to
+                    lambda s: s.date_start >= employee.overtime_start_date
+                    or employee.overtime_start_date <= s.date_end
                 )
             )
             overtime = sum(sheet.timesheet_overtime for sheet in sheets)

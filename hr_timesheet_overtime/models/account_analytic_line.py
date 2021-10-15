@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2020 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
@@ -19,13 +18,13 @@ class AnalyticLine(models.Model):
     @api.model
     def create(self, values):
         self._update_values(values)
-        return super(AnalyticLine, self).create(values)
+        return super().create(values)
 
     @api.multi
     def write(self, values):
         if not self.env.context.get("create"):  # sale module
             self._update_values(values)
-        return super(AnalyticLine, self).write(values)
+        return super().write(values)
 
     @api.model
     def _update_values(self, values):
