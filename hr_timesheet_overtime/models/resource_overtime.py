@@ -2,7 +2,7 @@
 # Copyright 2020 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from openerp import models, api, fields
+from odoo import models, api, fields
 
 
 class ResourceOvertime(models.Model):

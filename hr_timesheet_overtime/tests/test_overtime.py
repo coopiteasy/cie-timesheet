@@ -2,8 +2,8 @@
 # Copyright 2020 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from openerp.tests.common import TransactionCase
-from openerp.fields import Date
+from odoo.tests.common import TransactionCase
+from odoo.fields import Date
 from datetime import date
 
 
@@ -47,9 +47,9 @@ class TestOvertime(TransactionCase):
 
         self.contract1 = self.env["hr.contract"].create(contract_dict)
 
-        # analytic accounts
-        self.analytic_account_01 = self.env["account.analytic.account"].create(
-            {"name": "Analytic Account 01"}
+        # projects
+        self.project_01 = self.env["project.project"].create(
+            {"name": "Project 01"}
         )
 
         # create ts
@@ -64,10 +64,9 @@ class TestOvertime(TransactionCase):
         # monday 02/12/2019
         self.env["account.analytic.line"].create(
             {
-                "account_id": self.analytic_account_01.id,
+                "project_id": self.project_01.id,
                 "amount": 0.0,
                 "date": "2019-12-02",
-                "is_timesheet": "True",
                 "name": "/",
                 "sheet_id": self.ts1.id,
                 "unit_amount": 10.0,  # 1 hour overtime
@@ -78,10 +77,9 @@ class TestOvertime(TransactionCase):
         for day in range(3, 7):
             self.env["account.analytic.line"].create(
                 {
-                    "account_id": self.analytic_account_01.id,
+                    "project_id": self.project_01.id,
                     "amount": 0.0,
                     "date": Date.to_string(date(2019, 12, day)),
-                    "is_timesheet": "True",
                     "name": "/",
                     "sheet_id": self.ts1.id,
                     "unit_amount": 9.0,  # expected time
@@ -131,10 +129,9 @@ class TestOvertime(TransactionCase):
         # monday
         self.env["account.analytic.line"].create(
             {
-                "account_id": self.analytic_account_01.id,
+                "project_id": self.project_01.id,
                 "amount": 0.0,
                 "date": "2019-12-09",
-                "is_timesheet": "True",
                 "name": "/",
                 "sheet_id": ts2.id,
                 "unit_amount": 10.0,  # 1 hour overtime
@@ -145,10 +142,9 @@ class TestOvertime(TransactionCase):
         for day in range(10, 13):
             self.env["account.analytic.line"].create(
                 {
-                    "account_id": self.analytic_account_01.id,
+                    "project_id": self.project_01.id,
                     "amount": 0.0,
                     "date": Date.to_string(date(2019, 12, day)),
-                    "is_timesheet": "True",
                     "name": "/",
                     "sheet_id": ts2.id,
                     "unit_amount": 9.0,  # expected time
@@ -204,10 +200,9 @@ class TestOvertime(TransactionCase):
         # monday
         self.env["account.analytic.line"].create(
             {
-                "account_id": self.analytic_account_01.id,
+                "project_id": self.project_01.id,
                 "amount": 0.0,
                 "date": "2020-01-06",
-                "is_timesheet": "True",
                 "name": "/",
                 "sheet_id": self.ts2.id,
                 "unit_amount": 9.0,  # expected time from previous contract
@@ -219,10 +214,9 @@ class TestOvertime(TransactionCase):
         for day in range(7, 11):
             self.env["account.analytic.line"].create(
                 {
-                    "account_id": self.analytic_account_01.id,
+                    "project_id": self.project_01.id,
                     "amount": 0.0,
                     "date": Date.to_string(date(2020, 01, day)),
-                    "is_timesheet": "True",
                     "name": "/",
                     "sheet_id": self.ts2.id,
                     "unit_amount": 4.0,  # expected time from new contract

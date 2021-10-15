@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import time
 
-from openerp import models, api, fields
+from odoo import models, api, fields
 
 
 class HrEmployee(models.Model):
@@ -42,8 +42,8 @@ class HrEmployee(models.Model):
         for rec in self:
             has_access = False
             if self.env.user.has_group(
-                "base.group_hr_manager"
-            ) or self.env.user.has_group("base.group_hr_user"):
+                "hr.group_hr_manager"
+            ) or self.env.user.has_group("hr.group_hr_user"):
                 has_access = True
             elif (
                 rec.user_id.employee_ids.parent_id.id

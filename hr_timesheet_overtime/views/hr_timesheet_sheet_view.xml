@@ -11,10 +11,12 @@
         <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form"/>
         <field name="arch" type="xml">
 
-            <xpath expr="//div[@name='button_box']" position="inside">
-                <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-check">
-                    <field name="active" widget="boolean_button" options='{"terminology": "active"}'/>
-                </button>
+            <xpath expr="//div[hasclass('oe_title')]" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-check">
+                        <field name="active" widget="boolean_button" options='{"terminology": "active"}'/>
+                    </button>
+                </div>
             </xpath>
 
             <xpath expr="//group/group/label[@for='date_from']" position="before">
@@ -42,7 +44,7 @@
     <menuitem name="Overtime Rate"
               id="menu_hr_overtime_rate" sequence="100"
               parent="hr_attendance.timesheet_menu_root"
-              groups="base.group_hr_manager"
+              groups="hr.group_hr_manager"
               action="action_resource_overtime_form"/>
 
 </odoo>
