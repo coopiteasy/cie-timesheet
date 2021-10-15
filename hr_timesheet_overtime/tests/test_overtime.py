@@ -270,3 +270,58 @@ class TestOvertime(TransactionCase):
         self.assertEqual(
             self.ts2.total_overtime, 1
         )  # 1 hour overtime from ts1
+
+    def test_overtime_archived_timesheet(self):
+        """
+        Archived timesheets
+        """
+        ts2 = self.env["hr_timesheet.sheet"].create(
+            {
+                "employee_id": self.employee1.id,
+                "date_start": "2019-12-09",
+                "date_end": "2019-12-15",
+            }
+        )
+
+        # create and link aal
+        # monday -> friday
+        for day in range(9, 14):
+            self.env["account.analytic.line"].create(
+                {
+                    "project_id": self.project_01.id,
+                    "amount": 0.0,
+                    "date": date(2019, 12, day),
+                    "name": "-",
+                    "sheet_id": ts2.id,
+                    "unit_amount": 10.0,  # 1 hour overtime
+                    "user_id": self.employee1.user_id.id,
+                }
+            )
+
+        self.assertEqual(self.ts1.timesheet_overtime, 1)
+        self.assertEqual(self.ts1.total_overtime, 6)
+        self.assertEqual(ts2.timesheet_overtime, 5)
+        self.assertEqual(ts2.total_overtime, 6)
+        self.assertEqual(self.employee1.total_overtime, 6)
+
+        self.ts1.write({"active": False})
+        # an inactive timesheet still has the same overtime
+        self.assertEqual(self.ts1.timesheet_overtime, 1)
+        self.assertEqual(self.ts1.total_overtime, 5)
+        self.assertEqual(ts2.timesheet_overtime, 5)
+        self.assertEqual(ts2.total_overtime, 5)
+        self.assertEqual(self.employee1.total_overtime, 5)
+
+        ts2.write({"active": False})
+        self.assertEqual(self.ts1.timesheet_overtime, 1)
+        self.assertEqual(self.ts1.total_overtime, 0)
+        self.assertEqual(ts2.timesheet_overtime, 5)
+        self.assertEqual(ts2.total_overtime, 0)
+        self.assertEqual(self.employee1.total_overtime, 0)
+
+        self.ts1.write({"active": True})
+        self.assertEqual(self.ts1.timesheet_overtime, 1)
+        self.assertEqual(self.ts1.total_overtime, 1)
+        self.assertEqual(ts2.timesheet_overtime, 5)
+        self.assertEqual(ts2.total_overtime, 1)
+        self.assertEqual(self.employee1.total_overtime, 1)

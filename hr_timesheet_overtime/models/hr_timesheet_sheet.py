@@ -16,25 +16,21 @@ class HrTimesheetSheet(models.Model):
     # Numeric fields
     daily_working_hours = fields.Float(
         "Daily Working Hours",
-        readonly=True,
         compute="_compute_daily_working_hours",
         help="Hours to work for the current day",
     )
     daily_overtime = fields.Float(
         "Daily Overtime",
-        readonly=True,
         compute="_compute_daily_overtime",
         help="Overtime for the current day",
     )
     timesheet_overtime = fields.Float(
         "Timesheet Overtime",
-        readonly=True,
         compute="_compute_timesheet_overtime",
         help="Overtime for this timesheet period",
     )
     total_overtime = fields.Float(
         "Overtime Total",
-        readonly=True,
         related="employee_id.total_overtime",
         help="Overtime total since employee's overtime start date",
     )

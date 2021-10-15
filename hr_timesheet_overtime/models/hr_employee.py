@@ -17,10 +17,13 @@ class HrEmployee(models.Model):
     )
     total_overtime = fields.Float(
         string="Total Overtime",
-        default=0.0,
-        readonly=True,
         compute="_compute_total_overtime",
         help="Total Overtime since Overtime Start Date",
+    )
+    timesheet_sheet_ids = fields.One2many(
+        comodel_name="hr_timesheet.sheet",
+        inverse_name="employee_id",
+        string="Timesheet sheets",
     )
 
     # Date fields
@@ -54,6 +57,7 @@ class HrEmployee(models.Model):
             rec.has_overtime_access = has_access
 
     @api.multi
+    @api.depends("timesheet_sheet_ids.active")
     def _compute_total_overtime(self):
         """
         Computes total overtime since employee's overtime start date
