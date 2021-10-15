@@ -100,7 +100,7 @@
 
     <record id="pieter_parker_contract1" model="hr.contract">
         <field name="name">Pieter Parker Contract #1</field>
-        <field name="employee_id" ref="hr.employee_fp"/>
+        <field name="employee_id" ref="hr.employee_root"/>
         <field name="job_id" ref="hr.job_ceo"/>
         <field name="department_id" ref="hr.dep_management"/>
         <field name="type_id" ref="hr_contract.hr_contract_type_emp"/>
@@ -112,7 +112,7 @@
 
     <record id="pieter_parker_contract2" model="hr.contract">
         <field name="name">Pieter Parker Contract #2</field>
-        <field name="employee_id" ref="hr.employee_fp"/>
+        <field name="employee_id" ref="hr.employee_root"/>
         <field name="job_id" ref="hr.job_ceo"/>
         <field name="department_id" ref="hr.dep_management"/>
         <field name="type_id" ref="hr_contract.hr_contract_type_emp"/>
