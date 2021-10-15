@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2020 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
@@ -11,7 +10,7 @@ _logger = logging.getLogger(__name__)
 
 
 class HrTimesheetSheet(models.Model):
-    _inherit = "hr_timesheet_sheet.sheet"
+    _inherit = "hr_timesheet.sheet"
 
     active = fields.Boolean("Active", default=True)
     # Numeric fields
@@ -90,15 +89,8 @@ class HrTimesheetSheet(models.Model):
         total = 0.0
         contracts = self.get_contracts(date)
         for contract in contracts:
-            for calendar in contract.working_hours:
-                total += sum(
-                    wh
-                    for wh in calendar.get_working_hours_of_date(
-                        start_dt=date_dt.replace(hour=0, minute=0, second=0),
-                        end_dt=date_dt.replace(hour=23, minute=59, second=59),
-                        resource_id=calendar.id,
-                    )
-                )
+            for calendar in contract.resource_calendar_id:
+                total += calendar.get_day_work_hours_count(date_dt)
         return total
 
     def get_contracts(self, date):
@@ -123,25 +115,25 @@ class HrTimesheetSheet(models.Model):
     @api.multi
     def get_total_timesheet_period(self):
         """
-        Get total_timesheet from hr_timesheet_sheet.sheet.day
+        Get total_timesheet from hr_timesheet.sheet.day
         for each day of the timesheet period
         @return: dictionary {'date':'total_timesheet'}
         """
         self.ensure_one()
-        ts_day = self.env["hr_timesheet_sheet.sheet.day"].search(
+        ts_day = self.env["hr_timesheet.sheet.day"].search(
             [
                 ("sheet_id.active", "=", True),
                 ("sheet_id.employee_id.id", "=", self.employee_id.id),
-                ("sheet_id.date_from", ">=", self.date_from),
-                ("sheet_id.date_to", "<=", self.date_to),
+                ("sheet_id.date_start", ">=", self.date_start),
+                ("sheet_id.date_end", "<=", self.date_end),
             ]
         )
-        date_to = fields.Date.from_string(self.date_to)
-        date_from = fields.Date.from_string(self.date_from)
+        date_end = fields.Date.from_string(self.date_end)
+        date_start = fields.Date.from_string(self.date_start)
 
-        nb_days = (date_to - date_from).days + 1
+        nb_days = (date_end - date_start).days + 1
         periods = {
-            fields.Date.to_string(date_from + timedelta(days=d)): 0.0
+            fields.Date.to_string(date_start + timedelta(days=d)): 0.0
             for d in range(0, nb_days)
         }
         periods.update({ts.name: ts.total_timesheet for ts in ts_day})
