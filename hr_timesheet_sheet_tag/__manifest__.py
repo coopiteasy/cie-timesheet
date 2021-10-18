@@ -9,7 +9,7 @@
     "version": "12.0.1.0.0",
     "license": "AGPL-3",
     "author": "Coop IT Easy SCRLfs",
-    "website": "http://coopiteasy.be",
+    "website": "https://coopiteasy.be",
     "depends": ["hr_timesheet_sheet"],
     "data": ["views/hr_timesheet_sheet.xml"],
     "demo": [],
