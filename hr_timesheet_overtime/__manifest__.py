@@ -5,17 +5,21 @@
     "name": "Timesheet/Contract - Overtime",
     "version": "12.0.1.0.0",
     "category": "Human Resources",
-    "summary": """Overtime Calculation""",
+    "summary": "Overtime Calculation",
     "author": "Coop IT Easy SCRLfs, Odoo Community Association (OCA)",
-    "website": "www.coopiteasy.be",
+    "website": "https://coopiteasy.be",
     "license": "AGPL-3",
-    "depends": ["hr_contract", "hr_timesheet_sheet"],
+    "depends": [
+        "hr_timesheet_sheet",
+        "resource_work_time_from_contracts",
+    ],
     "data": [
         "security/ir.model.access.csv",
         "views/hr_employee_view.xml",
         "views/resource_view.xml",
         "views/hr_timesheet_sheet_view.xml",
     ],
-    "demo": ["demo/hr_contract_demo.xml"],
-    "installable": True,
+    "demo": [
+        "demo/hr_contract_demo.xml",
+    ],
 }
