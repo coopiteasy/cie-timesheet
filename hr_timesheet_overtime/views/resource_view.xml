@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!--
      Copyright 2020 Coop IT Easy
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
@@ -10,9 +10,9 @@
         <field name="model">resource.overtime</field>
         <field name="arch" type="xml">
             <search string="Search Overtime Rate">
-                <field name="name" string="Overtime Rate"/>
-                <field name="manager"/>
-                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="name" string="Overtime Rate" />
+                <field name="manager" />
+                <field name="company_id" groups="base.group_multi_company" />
             </search>
         </field>
     </record>
@@ -23,11 +23,11 @@
         <field name="arch" type="xml">
             <form string="Overtime Rate">
                 <group>
-                    <field name="name"/>
-                    <field name="manager"/>
-                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="name" />
+                    <field name="manager" />
+                    <field name="company_id" groups="base.group_multi_company" />
                 </group>
-                <field name="rate_ids"/>
+                <field name="rate_ids" />
             </form>
         </field>
     </record>
@@ -37,9 +37,9 @@
         <field name="model">resource.overtime</field>
         <field name="arch" type="xml">
             <tree string="Overtime Rate">
-                <field name="name"/>
-                <field name="manager"/>
-                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="name" />
+                <field name="manager" />
+                <field name="company_id" groups="base.group_multi_company" />
             </tree>
         </field>
     </record>
@@ -49,8 +49,8 @@
         <field name="res_model">resource.overtime</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_id" eval="False"/>
-        <field name="search_view_id" ref="view_resource_overtime_search"/>
+        <field name="view_id" eval="False" />
+        <field name="search_view_id" ref="view_resource_overtime_search" />
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
                 Define rate
@@ -64,9 +64,9 @@
         <field name="model">resource.overtime.rate</field>
         <field name="arch" type="xml">
             <tree string="Overtime Rate" editable="top">
-                <field name="name"/>
-                <field name="dayofweek"/>
-                <field name="rate"/>
+                <field name="name" />
+                <field name="dayofweek" />
+                <field name="rate" />
             </tree>
         </field>
     </record>
@@ -77,17 +77,19 @@
         <field name="arch" type="xml">
             <form string="Overtime Rate">
                 <group>
-                    <field name="name"/>
-                    <field name="dayofweek"/>
-                    <field name="rate"/>
+                    <field name="name" />
+                    <field name="dayofweek" />
+                    <field name="rate" />
                 </group>
             </form>
         </field>
     </record>
 
-    <menuitem action="action_resource_overtime_form"
-              id="menu_resource_overtime"
-              parent="resource.menu_resource_config"
-              sequence="4"/>
+    <menuitem
+        action="action_resource_overtime_form"
+        id="menu_resource_overtime"
+        parent="resource.menu_resource_config"
+        sequence="4"
+    />
 
 </odoo>

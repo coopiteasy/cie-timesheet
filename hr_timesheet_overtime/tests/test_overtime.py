@@ -1,8 +1,9 @@
 # Copyright 2020 Coop IT Easy SCRLfs
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo.tests.common import TransactionCase
 from datetime import date
+
+from odoo.tests.common import TransactionCase
 
 
 class TestOvertime(TransactionCase):
@@ -24,7 +25,8 @@ class TestOvertime(TransactionCase):
         # working hours
         # calendar have default attendance_ids, force it to have none.
         calendar = self.env["resource.calendar"].create(
-            {"name": "Calendar", "attendance_ids": False})
+            {"name": "Calendar", "attendance_ids": False}
+        )
         for day in range(5):
             self.env["resource.calendar.attendance"].create(
                 {
@@ -207,7 +209,8 @@ class TestOvertime(TransactionCase):
         # create new contract
         # working hours : half-time
         calendar = self.env["resource.calendar"].create(
-            {"name": "Calendar", "attendance_ids": False})
+            {"name": "Calendar", "attendance_ids": False}
+        )
         for day in range(5):  # from monday to friday
             self.env["resource.calendar.attendance"].create(
                 {

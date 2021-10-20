@@ -2,9 +2,9 @@
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
+from datetime import datetime, timedelta
 
 from odoo import api, fields, models
-from datetime import datetime, timedelta
 
 _logger = logging.getLogger(__name__)
 
@@ -92,7 +92,8 @@ class HrTimesheetSheet(models.Model):
 
     def get_day_work_hours(self, date_dt, calendar):
         work_time_per_day = self.employee_id.list_work_time_per_day(
-            date_dt, date_dt + timedelta(days=1), calendar)
+            date_dt, date_dt + timedelta(days=1), calendar
+        )
         if not work_time_per_day:
             return 0.0
         # .list_work_time_per_day() returns a list of tuples:
@@ -113,7 +114,9 @@ class HrTimesheetSheet(models.Model):
                 [
                     ("employee_id", "=", self.employee_id.id),
                     ("date_start", "<=", date),
-                    "|", ("date_end", "=", None), ("date_end", ">=", date),
+                    "|",
+                    ("date_end", "=", None),
+                    ("date_end", ">=", date),
                 ]
             )
         )
@@ -128,8 +131,7 @@ class HrTimesheetSheet(models.Model):
         date_start = self.date_start
         nb_days = (self.date_end - date_start).days + 1
         totals_per_day = {
-            date_start + timedelta(days=d): 0.0
-            for d in range(nb_days)
+            date_start + timedelta(days=d): 0.0 for d in range(nb_days)
         }
         for timesheet in self.timesheet_ids:
             totals_per_day[timesheet.date] += timesheet.unit_amount

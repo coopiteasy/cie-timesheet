@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from datetime import date
 
-from odoo import models, api, fields
+from odoo import api, fields, models
 
 
 class HrEmployee(models.Model):
@@ -63,14 +63,11 @@ class HrEmployee(models.Model):
         Computes total overtime since employee's overtime start date
         """
         for employee in self:
-            sheets = (
-                self.env["hr_timesheet.sheet"]
-                .search(
-                    [
-                        ("employee_id", "=", employee.id),
-                        ("date_end", ">=", employee.overtime_start_date),
-                    ]
-                )
+            sheets = self.env["hr_timesheet.sheet"].search(
+                [
+                    ("employee_id", "=", employee.id),
+                    ("date_end", ">=", employee.overtime_start_date),
+                ]
             )
             overtime = sum(sheet.timesheet_overtime for sheet in sheets)
             employee.total_overtime = employee.initial_overtime + overtime
