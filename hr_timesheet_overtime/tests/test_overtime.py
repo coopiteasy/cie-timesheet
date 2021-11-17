@@ -32,8 +32,8 @@ class TestOvertime(TransactionCase):
                 {
                     "name": "Attendance",
                     "dayofweek": str(day),
-                    "hour_from": "09",
-                    "hour_to": "18",
+                    "hour_from": 9.0,
+                    "hour_to": 18.0,
                     "calendar_id": calendar[0].id,
                 }
             )
@@ -216,8 +216,8 @@ class TestOvertime(TransactionCase):
                 {
                     "name": "Attendance",
                     "dayofweek": str(day),
-                    "hour_from": "09",
-                    "hour_to": "13",
+                    "hour_from": 9.0,
+                    "hour_to": 13.0,
                     "calendar_id": calendar[0].id,
                 }
             )

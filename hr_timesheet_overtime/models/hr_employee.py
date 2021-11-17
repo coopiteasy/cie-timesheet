@@ -3,6 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from datetime import date, datetime, timedelta
 
+from pytz import timezone
+
 from odoo import api, fields, models
 
 
@@ -56,23 +58,17 @@ class HrEmployee(models.Model):
         self.ensure_one()
         if end_date is None:
             end_date = start_date
-        start_dt = datetime(start_date.year, start_date.month, start_date.day)
-        end_dt = datetime(
-            end_date.year, end_date.month, end_date.day
-        ) + timedelta(days=1)
-        # by default, list_work_time_per_day() returns 0 for days with leaves.
-        # in our case, we want to ignore leaves. the domain argument is used
-        # to query leave intervals from resource.calendar.leaves (in
-        # resource.resource.ResourceCalendar._leave_intervals()). the default
-        # is [('time_type', '=', 'leave')]. to ensure that no leaves are
-        # found, we want to use a domain that will never return anything. we
-        # use [("calendar_id", "=", False)] because it will be added to
-        # another domain asking for a specific calendar_id, resulting in a
-        # query returning no results.
-        work_time_per_day = self.list_work_time_per_day(
-            start_dt, end_dt, domain=[("calendar_id", "=", False)]
+        tz = timezone(self.tz)
+        start_dt = tz.localize(
+            datetime(start_date.year, start_date.month, start_date.day)
         )
-        # .list_work_time_per_day() returns a list of tuples:
+        end_dt = tz.localize(
+            datetime(end_date.year, end_date.month, end_date.day)
+        ) + timedelta(days=1)
+        work_time_per_day = self.list_normal_work_time_per_day(
+            start_dt, end_dt
+        )
+        # .list_normal_work_time_per_day() returns a list of tuples:
         # (date, work time)
         return sum(work_time[1] for work_time in work_time_per_day)
 
