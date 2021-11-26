@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="action_hr_timesheet_current_open" model="ir.actions.server">
+        <field name="name">My Current Timesheet Sheet</field>
+        <field name="model_id" ref="model_hr_timesheet_sheet" />
+        <field name="state">code</field>
+        <field name="code">
+            action = model.get_current_timesheet()
+        </field>
+    </record>
+
+    <menuitem
+        action="action_hr_timesheet_current_open"
+        id="menu_act_hr_timesheet_sheet_form_my_current"
+        name="My Current Timesheet Sheet"
+        parent="hr_timesheet.menu_hr_time_tracking"
+        sequence="1"
+    />
+
+
+</odoo>
