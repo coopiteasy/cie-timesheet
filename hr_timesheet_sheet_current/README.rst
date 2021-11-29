@@ -13,15 +13,15 @@ My Current Timesheet Sheet
 .. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
-.. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fvertical--cooperative-lightgray.png?logo=github
-    :target: https://github.com/OCA/vertical-cooperative/tree/12.0-add-my-current-timesheet/hr_timesheet_sheet_current
-    :alt: OCA/vertical-cooperative
-.. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/vertical-cooperative-12-0-add-my-current-timesheet/vertical-cooperative-12-0-add-my-current-timesheet-hr_timesheet_sheet_current
-    :alt: Translate me on Weblate
+.. |badge3| image:: https://img.shields.io/badge/github-coopiteasy%2Fcie--timesheet-lightgray.png?logo=github
+    :target: https://github.com/coopiteasy/cie-timesheet/tree/12.0/hr_timesheet_sheet_current
+    :alt: coopiteasy/cie-timesheet
 
-|badge1| |badge2| |badge3| |badge4| 
+|badge1| |badge2| |badge3| 
 
+Allow to access the current timesheet sheet directly from the menu.
+
+A new menu is added to the Timesheet module, pointing directly to the user's current timesheet sheet. 
 
 **Table of contents**
 
@@ -31,10 +31,10 @@ My Current Timesheet Sheet
 Bug Tracker
 ===========
 
-Bugs are tracked on `GitHub Issues <https://github.com/OCA/vertical-cooperative/issues>`_.
+Bugs are tracked on `GitHub Issues <https://github.com/coopiteasy/cie-timesheet/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/vertical-cooperative/issues/new?body=module:%20hr_timesheet_sheet_current%0Aversion:%2012.0-add-my-current-timesheet%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/coopiteasy/cie-timesheet/issues/new?body=module:%20hr_timesheet_sheet_current%0Aversion:%2012.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -46,19 +46,16 @@ Authors
 
 * Coop IT Easy SCRLfs
 
+Contributors
+~~~~~~~~~~~~
+
+* `Coop IT Easy SCRLfs <https://coopiteasy.be>`_:
+
+  * victor champonnois
+
 Maintainers
 ~~~~~~~~~~~
 
-This module is maintained by the OCA.
+This module is part of the `coopiteasy/cie-timesheet <https://github.com/coopiteasy/cie-timesheet/tree/12.0/hr_timesheet_sheet_current>`_ project on GitHub.
 
-.. image:: https://odoo-community.org/logo.png
-   :alt: Odoo Community Association
-   :target: https://odoo-community.org
-
-OCA, or the Odoo Community Association, is a nonprofit organization whose
-mission is to support the collaborative development of Odoo features and
-promote its widespread use.
-
-This module is part of the `OCA/vertical-cooperative <https://github.com/OCA/vertical-cooperative/tree/12.0-add-my-current-timesheet/hr_timesheet_sheet_current>`_ project on GitHub.
-
-You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
+You are welcome to contribute.
