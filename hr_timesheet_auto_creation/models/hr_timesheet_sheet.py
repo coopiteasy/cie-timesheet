@@ -35,14 +35,20 @@ class HrTimesheetSheet(models.Model):
             lambda x: x.employee_id.id, exists_timesheet_records
         )
         employee_ids = list(set(employee_ids) - set(ignore_employee_ids))
+        sudo_self = self.sudo()
         for employee_id in employee_ids:
-            self.sudo().create(
+            sheet = sudo_self.create(
                 {
                     "employee_id": employee_id,
                     "date_start": monday,
                     "date_end": sunday,
                 }
             )
+            # this is necessary to link corresponding existing "timesheets"
+            # (account.analytic.line), that were created with a future date
+            # for which no timesheet sheet existed yet, to the newly created
+            # timesheet sheet.
+            sheet._compute_timesheet_ids()
             _logger.info(
                 "[hr_timesheet_auto_creation] hr_timesheet.sheet "
                 "created for employee %s " % employee_id
