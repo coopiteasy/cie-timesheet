@@ -5,11 +5,9 @@
 {
     "name": "HR TimeSheet Auto Creation",
     "summary": "Create weekly timesheets for employees automatically",
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.1",
     "category": "Human Resources",
-    "author": (
-        "Coop IT Easy SCRLfs, Elico Corp, Odoo Community Association (OCA)"
-    ),
+    "author": "Coop IT Easy SCRLfs, Elico Corp",
     "license": "AGPL-3",
     "website": "https://coopiteasy.be",
     "depends": [
