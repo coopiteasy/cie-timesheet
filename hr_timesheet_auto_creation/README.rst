@@ -71,9 +71,11 @@ Contributors
 
 * Kevin Dong <kevin.dong@elico-corp.com>
 * Eric Caudal <eric.caudal@elico-corp.com>
-* Vincent Van Rossem <vincent@coopiteasy.be>
-* Robin Keunen
-* hugues de keyzer
+* `Coop IT Easy SCRLfs <https://coopiteasy.be>`_:
+
+  * Vincent Van Rossem
+  * Robin Keunen
+  * hugues de keyzer
 
 Other credits
 ~~~~~~~~~~~~~
@@ -89,10 +91,10 @@ well known international companies and as well as local mid-sized businesses.
 Since 2010, our seasoned Sino-European consultants have been providing full
 range Odoo services:
 
-* Business consultancy for Gap analysis, BPM, operational work-flows review. 
+* Business consultancy for Gap analysis, BPM, operational work-flows review.
 * Ready-to-use ERP packages aimed at starting businesses.
 * Odoo implementation for manufacturing, international trading, service industry
-  and e-commerce. 
+  and e-commerce.
 * Connectors and integration with 3rd party software (Magento, Taobao, Coswin,
   Joomla, Prestashop, Tradevine etc...).
 * Odoo Support services such as developments, training, maintenance and hosting.
