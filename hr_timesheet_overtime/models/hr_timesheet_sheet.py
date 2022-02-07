@@ -78,10 +78,7 @@ class HrTimesheetSheet(models.Model):
             employee = sheet.employee_id
             start_date = sheet.date_start
             end_date = sheet.date_end
-            if (
-                current_day < start_date
-                or employee.overtime_start_date > end_date
-            ):
+            if current_day < start_date or employee.overtime_start_date > end_date:
                 sheet.timesheet_overtime = 0.0
                 continue
             if employee.overtime_start_date > start_date:
