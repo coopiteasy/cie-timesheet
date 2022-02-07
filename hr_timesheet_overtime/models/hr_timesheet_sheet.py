@@ -33,6 +33,7 @@ class HrTimesheetSheet(models.Model):
         "Overtime Total",
         related="employee_id.total_overtime",
         help="Overtime total since employee's overtime start date",
+        store=True,
     )
 
     def get_worked_hours(self, start_date, end_date=None):
