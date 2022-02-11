@@ -5,7 +5,10 @@ from datetime import date, datetime, timedelta
 
 from pytz import timezone
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import AccessError
+
+OVERTIME_WRITE_ACCESS_GROUPS = ("hr.group_hr_user", "hr.group_hr_manager")
 
 
 class HrEmployee(models.Model):
@@ -88,15 +91,19 @@ class HrEmployee(models.Model):
     def _compute_has_overtime_access(self):
         for rec in self:
             has_access = False
-            if self.env.user.has_group(
-                "hr.group_hr_manager"
-            ) or self.env.user.has_group("hr.group_hr_user"):
+            if self._has_overtime_write_access():
                 has_access = True
             elif rec.user_id == self.env.user:
                 has_access = True
             else:
                 subordinates = self.env["hr.employee"].search(
-                    [("id", "child_of", self.env.user.employee_ids.mapped("id"))]
+                    [
+                        (
+                            "id",
+                            "child_of",
+                            self.env.user.employee_ids.mapped("id"),
+                        )
+                    ]
                 )
                 has_access = rec in subordinates
             rec.has_overtime_access = has_access
@@ -116,3 +123,22 @@ class HrEmployee(models.Model):
             )
             overtime = sum(sheet.timesheet_overtime for sheet in sheets)
             employee.total_overtime = employee.initial_overtime + overtime
+
+    def _has_overtime_write_access(self):
+        for group in OVERTIME_WRITE_ACCESS_GROUPS:
+            if self.env.user.has_group(group):
+                return True
+        return False
+
+    def write(self, vals):
+        for restricted_field in ["initial_overtime", "overtime_start_date"]:
+            if (
+                restricted_field in vals
+                and self[restricted_field] != vals[restricted_field]
+                and not self._has_overtime_write_access()
+            ):
+                raise AccessError(
+                    _("You do not have the permission to modify this field.")
+                )
+
+        return super(HrEmployee, self).write(vals)
