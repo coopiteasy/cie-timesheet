@@ -92,13 +92,13 @@ class HrEmployee(models.Model):
                 "hr.group_hr_manager"
             ) or self.env.user.has_group("hr.group_hr_user"):
                 has_access = True
-            elif (
-                rec.user_id.employee_ids.parent_id.id
-                == self.env.user.employee_ids.id
-            ):
-                has_access = True
             elif rec.user_id == self.env.user:
                 has_access = True
+            else:
+                subordinates = self.env["hr.employee"].search(
+                    [("id", "child_of", self.env.user.employee_ids.mapped("id"))]
+                )
+                has_access = rec in subordinates
             rec.has_overtime_access = has_access
 
     @api.multi
