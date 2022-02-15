@@ -13,11 +13,11 @@
                 <page
                     name="overtime"
                     string="Overtime"
-                    attrs="{'invisible': [('has_overtime_access', '=', False)]}"
+                    attrs="{'invisible': [('_has_overtime_access', '=', False)]}"
                 >
                     <group>
                         <group name="overtime" string="Overtime">
-                            <field name="has_overtime_access" invisible="True" />
+                            <field name="_has_overtime_access" invisible="True" />
                             <field name="initial_overtime" widget="float_time" />
                             <field name="total_overtime" widget="float_time" />
                             <field name="overtime_start_date" />

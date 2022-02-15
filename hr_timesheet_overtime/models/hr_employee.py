@@ -44,7 +44,7 @@ class HrEmployee(models.Model):
         help="Overtime Start Date to compute overtime",
     )
 
-    has_overtime_access = fields.Boolean(
+    _has_overtime_access = fields.Boolean(
         string="Has access to overtime page",
         compute="_compute_has_overtime_access",
     )
@@ -106,7 +106,7 @@ class HrEmployee(models.Model):
                     ]
                 )
                 has_access = rec in subordinates
-            rec.has_overtime_access = has_access
+            rec._has_overtime_access = has_access
 
     @api.multi
     @api.depends("timesheet_sheet_ids.active")
