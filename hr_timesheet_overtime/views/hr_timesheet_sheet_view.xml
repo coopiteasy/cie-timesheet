@@ -87,10 +87,17 @@
     </record>
 
     <menuitem
-        name="Overtime Rate"
-        id="menu_hr_overtime_rate"
-        sequence="100"
+        name="Overtime"
+        id="menu_hr_timesheet_overtime"
+        sequence="99"
         parent="hr_timesheet.timesheet_menu_root"
+    />
+
+    <menuitem
+        name="Overtime Rate"
+        id="menu_hr_timesheet_overtime_rate"
+        sequence="100"
+        parent="menu_hr_timesheet_overtime"
         groups="hr.group_hr_manager"
         action="action_resource_overtime_form"
     />
