@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2022 Coop IT Easy SCRLfs
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record model="ir.ui.view" id="project_task_form_view">
+        <field
+            name="name"
+        >project.task.form (in hr_timesheet_task_change_project)</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited" />
+        <field name="arch" type="xml">
+            <!--
+                move the invisible project_id field (which is positioned last) after the
+                name field and make it visible.
+            -->
+            <xpath
+                expr="//field[@name='timesheet_ids']/tree/field[@name='name']"
+                position="after"
+            >
+                <xpath
+                    expr="//field[@name='timesheet_ids']/tree/field[@name='project_id']"
+                    position="move"
+                />
+            </xpath>
+            <xpath
+                expr="//field[@name='timesheet_ids']/tree/field[@name='project_id']"
+                position="attributes"
+            >
+                <attribute name="invisible" />
+                <attribute name="required">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
