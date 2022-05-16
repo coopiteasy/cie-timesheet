@@ -88,5 +88,5 @@ class HrEmployee(models.Model):
                     ("date_end", ">=", employee.overtime_start_date),
                 ]
             )
-            overtime = sum(sheet.timesheet_overtime for sheet in sheets)
+            overtime = sum(sheet.timesheet_overtime_trimmed for sheet in sheets)
             employee.total_overtime = employee.initial_overtime + overtime
