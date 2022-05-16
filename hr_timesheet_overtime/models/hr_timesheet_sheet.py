@@ -29,6 +29,11 @@ class HrTimesheetSheet(models.Model):
         compute="_compute_daily_overtime",
         help="Overtime for the current day",
     )
+    timesheet_overtime = fields.Float(
+        "Timesheet Overtime",
+        compute="_compute_timesheet_overtime",
+        help="Overtime for this timesheet period",
+    )
     timesheet_overtime_trimmed = fields.Float(
         "Trimmed Timesheet Overtime",
         compute="_compute_timesheet_overtime_trimmed",
@@ -78,6 +83,11 @@ class HrTimesheetSheet(models.Model):
             working_time = sheet.employee_id.get_working_time(current_day)
             worked_time = sheet.get_worked_time(current_day)
             sheet.daily_overtime = worked_time - working_time
+
+    @api.multi
+    def _compute_timesheet_overtime(self):
+        for sheet in self:
+            sheet.timesheet_overtime = sheet.total_time - sheet.working_time
 
     @api.multi
     def _compute_timesheet_overtime_trimmed(self):

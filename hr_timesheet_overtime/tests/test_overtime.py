@@ -93,6 +93,7 @@ class TestOvertime(TransactionCase):
         """
 
         self.assertEqual(self.ts1.timesheet_overtime_trimmed, 1)
+        self.assertEqual(self.ts1.timesheet_overtime, 1)
         self.assertEqual(self.ts1.total_overtime, 1)
 
     def test_overtime_02(self):
@@ -139,8 +140,10 @@ class TestOvertime(TransactionCase):
 
         # overtime for any timesheet takes overtime_start_date into account
         self.assertEqual(self.ts1.timesheet_overtime_trimmed, 0)
+        self.assertEqual(self.ts1.timesheet_overtime, 1)
         # it should start computing on tuesday
         self.assertEqual(ts2.timesheet_overtime_trimmed, 1)
+        self.assertEqual(ts2.timesheet_overtime, 2)
         self.assertEqual(ts2.total_overtime, 1)
         # total_overtime is just a link to the employee's total overtime
         self.assertEqual(self.ts1.total_overtime, 1)
@@ -152,6 +155,7 @@ class TestOvertime(TransactionCase):
         self.employee1.write({"initial_overtime": 10})
 
         self.assertEqual(self.ts1.timesheet_overtime_trimmed, 1)
+        self.assertEqual(self.ts1.timesheet_overtime, 1)
         self.assertEqual(self.ts1.total_overtime, 11)
 
     def test_overtime_04(self):
@@ -194,6 +198,7 @@ class TestOvertime(TransactionCase):
             )
 
         self.assertEqual(ts2.timesheet_overtime_trimmed, -8)
+        self.assertEqual(ts2.timesheet_overtime, -8)
         self.assertEqual(ts2.total_overtime, -7)
 
     def test_overtime_05(self):
@@ -268,6 +273,7 @@ class TestOvertime(TransactionCase):
             )
 
         self.assertEqual(self.ts2.timesheet_overtime_trimmed, 0)
+        self.assertEqual(self.ts2.timesheet_overtime, 0)
         self.assertEqual(self.ts2.total_overtime, 1)  # 1 hour overtime from ts1
 
     def test_overtime_archived_timesheet(self):
@@ -298,29 +304,37 @@ class TestOvertime(TransactionCase):
             )
 
         self.assertEqual(self.ts1.timesheet_overtime_trimmed, 1)
+        self.assertEqual(self.ts1.timesheet_overtime, 1)
         self.assertEqual(self.ts1.total_overtime, 6)
         self.assertEqual(ts2.timesheet_overtime_trimmed, 5)
+        self.assertEqual(ts2.timesheet_overtime, 5)
         self.assertEqual(ts2.total_overtime, 6)
         self.assertEqual(self.employee1.total_overtime, 6)
 
         self.ts1.write({"active": False})
         # an inactive timesheet still has the same overtime
         self.assertEqual(self.ts1.timesheet_overtime_trimmed, 1)
+        self.assertEqual(self.ts1.timesheet_overtime, 1)
         self.assertEqual(self.ts1.total_overtime, 5)
         self.assertEqual(ts2.timesheet_overtime_trimmed, 5)
+        self.assertEqual(ts2.timesheet_overtime, 5)
         self.assertEqual(ts2.total_overtime, 5)
         self.assertEqual(self.employee1.total_overtime, 5)
 
         ts2.write({"active": False})
         self.assertEqual(self.ts1.timesheet_overtime_trimmed, 1)
+        self.assertEqual(self.ts1.timesheet_overtime, 1)
         self.assertEqual(self.ts1.total_overtime, 0)
         self.assertEqual(ts2.timesheet_overtime_trimmed, 5)
+        self.assertEqual(ts2.timesheet_overtime, 5)
         self.assertEqual(ts2.total_overtime, 0)
         self.assertEqual(self.employee1.total_overtime, 0)
 
         self.ts1.write({"active": True})
         self.assertEqual(self.ts1.timesheet_overtime_trimmed, 1)
+        self.assertEqual(self.ts1.timesheet_overtime, 1)
         self.assertEqual(self.ts1.total_overtime, 1)
         self.assertEqual(ts2.timesheet_overtime_trimmed, 5)
+        self.assertEqual(ts2.timesheet_overtime, 5)
         self.assertEqual(ts2.total_overtime, 1)
         self.assertEqual(self.employee1.total_overtime, 1)
