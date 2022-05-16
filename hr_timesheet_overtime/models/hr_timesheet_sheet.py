@@ -19,6 +19,11 @@ class HrTimesheetSheet(models.Model):
         related="employee_id.current_day_working_time",
         help="Hours to work for the current day",
     )
+    working_time = fields.Float(
+        "Working Hours",
+        compute="_compute_working_time",
+        help="Hours to work for the timesheet period",
+    )
     daily_overtime = fields.Float(
         "Daily Overtime",
         compute="_compute_daily_overtime",
@@ -54,6 +59,13 @@ class HrTimesheetSheet(models.Model):
             ]
         )
         return sum(line.unit_amount for line in aal)
+
+    @api.multi
+    def _compute_working_time(self):
+        for sheet in self:
+            sheet.working_time = sheet.employee_id.get_working_time(
+                sheet.date_start, sheet.date_end
+            )
 
     @api.multi
     def _compute_daily_overtime(self):
