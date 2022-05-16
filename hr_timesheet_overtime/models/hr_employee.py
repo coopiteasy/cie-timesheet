@@ -68,9 +68,7 @@ class HrEmployee(models.Model):
         end_dt = tz.localize(
             datetime(end_date.year, end_date.month, end_date.day)
         ) + timedelta(days=1)
-        work_time_per_day = self.list_normal_work_time_per_day(
-            start_dt, end_dt
-        )
+        work_time_per_day = self.list_normal_work_time_per_day(start_dt, end_dt)
         # .list_normal_work_time_per_day() returns a list of tuples:
         # (date, work time)
         return sum(work_time[1] for work_time in work_time_per_day)
@@ -83,9 +81,7 @@ class HrEmployee(models.Model):
         """
         current_day = date.today()
         for employee in self:
-            employee.current_day_working_hours = employee.get_working_hours(
-                current_day
-            )
+            employee.current_day_working_hours = employee.get_working_hours(current_day)
 
     @api.multi
     def _compute_has_overtime_access(self):

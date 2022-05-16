@@ -50,9 +50,7 @@ class TestOvertime(TransactionCase):
         self.contract1 = self.env["hr.contract"].create(contract_dict)
 
         # projects
-        self.project_01 = self.env["project.project"].create(
-            {"name": "Project 01"}
-        )
+        self.project_01 = self.env["project.project"].create({"name": "Project 01"})
 
         # create ts
         ts1_dict = {
@@ -270,9 +268,7 @@ class TestOvertime(TransactionCase):
             )
 
         self.assertEqual(self.ts2.timesheet_overtime, 0)
-        self.assertEqual(
-            self.ts2.total_overtime, 1
-        )  # 1 hour overtime from ts1
+        self.assertEqual(self.ts2.total_overtime, 1)  # 1 hour overtime from ts1
 
     def test_overtime_archived_timesheet(self):
         """
