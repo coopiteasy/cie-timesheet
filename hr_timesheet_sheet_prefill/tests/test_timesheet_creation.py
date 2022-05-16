@@ -11,19 +11,13 @@ class TestHrTimesheetSheetPrefill(TransactionCase):
         super().setUp()
 
         # projects
-        self.project_01 = self.env["project.project"].create(
-            {"name": "Project 01"}
-        )
-        self.project_02 = self.env["project.project"].create(
-            {"name": "Project 02"}
-        )
+        self.project_01 = self.env["project.project"].create({"name": "Project 01"})
+        self.project_02 = self.env["project.project"].create({"name": "Project 02"})
 
     def test_timesheet_creation_fail_linked_employee(self):
         # unlinked employee
         unlinked_employee_dict = {"name": "Unlinked Employee"}
-        unlinked_employee = self.env["hr.employee"].create(
-            unlinked_employee_dict
-        )
+        unlinked_employee = self.env["hr.employee"].create(unlinked_employee_dict)
 
         ts_unlinked_employee_dict = {
             "employee_id": unlinked_employee.id,

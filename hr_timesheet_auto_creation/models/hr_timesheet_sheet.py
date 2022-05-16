@@ -31,9 +31,7 @@ class HrTimesheetSheet(models.Model):
         sunday = monday + timedelta(days=6)
         # Search for existing timesheet
         exists_timesheet_records = self.search([("date_end", ">=", monday)])
-        ignore_employee_ids = map(
-            lambda x: x.employee_id.id, exists_timesheet_records
-        )
+        ignore_employee_ids = map(lambda x: x.employee_id.id, exists_timesheet_records)
         employee_ids = list(set(employee_ids) - set(ignore_employee_ids))
         sudo_self = self.sudo()
         for employee_id in employee_ids:
