@@ -58,7 +58,7 @@
             </xpath>
 
             <xpath expr="//group/group/label[@for='date_start']" position="before">
-                <field name="daily_working_hours" widget="float_time" />
+                <field name="daily_working_time" widget="float_time" />
                 <field name="daily_overtime" widget="float_time" />
                 <field name="total_overtime" widget="float_time" />
             </xpath>
