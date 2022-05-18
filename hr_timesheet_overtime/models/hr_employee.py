@@ -12,9 +12,9 @@ class HrEmployee(models.Model):
     _inherit = "hr.employee"
 
     # Numeric fields
-    current_day_working_hours = fields.Float(
+    current_day_working_time = fields.Float(
         "Current Day Working Hours",
-        compute="_compute_current_day_working_hours",
+        compute="_compute_current_day_working_time",
         help="Hours to work for the current day",
     )
     initial_overtime = fields.Float(
@@ -42,7 +42,7 @@ class HrEmployee(models.Model):
     )
 
     @api.multi
-    def get_working_hours(self, start_date, end_date=None):
+    def get_working_time(self, start_date, end_date=None):
         """
         Get the working hours for a given date range according to the
         employee's contracts
@@ -66,14 +66,14 @@ class HrEmployee(models.Model):
         return sum(work_time[1] for work_time in work_time_per_day)
 
     @api.multi
-    def _compute_current_day_working_hours(self):
+    def _compute_current_day_working_time(self):
         """
         Computes working hours for the current day according to the employee's
         contracts.
         """
         current_day = date.today()
         for employee in self:
-            employee.current_day_working_hours = employee.get_working_hours(current_day)
+            employee.current_day_working_time = employee.get_working_time(current_day)
 
     @api.multi
     @api.depends("timesheet_sheet_ids.active")

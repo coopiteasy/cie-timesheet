@@ -14,9 +14,9 @@ class HrTimesheetSheet(models.Model):
 
     active = fields.Boolean("Active", default=True)
     # Numeric fields
-    daily_working_hours = fields.Float(
+    daily_working_time = fields.Float(
         "Daily Working Hours",
-        related="employee_id.current_day_working_hours",
+        related="employee_id.current_day_working_time",
         help="Hours to work for the current day",
     )
     daily_overtime = fields.Float(
@@ -35,7 +35,7 @@ class HrTimesheetSheet(models.Model):
         help="Overtime total since employee's overtime start date",
     )
 
-    def get_worked_hours(self, start_date, end_date=None):
+    def get_worked_time(self, start_date, end_date=None):
         """
         Get total of worked hours from account analytic lines
         for a given date range
@@ -62,9 +62,9 @@ class HrTimesheetSheet(models.Model):
         """
         current_day = date.today()
         for sheet in self:
-            working_hours = sheet.employee_id.get_working_hours(current_day)
-            worked_hours = sheet.get_worked_hours(current_day)
-            sheet.daily_overtime = worked_hours - working_hours
+            working_time = sheet.employee_id.get_working_time(current_day)
+            worked_time = sheet.get_worked_time(current_day)
+            sheet.daily_overtime = worked_time - working_time
 
     @api.multi
     def _compute_timesheet_overtime(self):
@@ -85,6 +85,6 @@ class HrTimesheetSheet(models.Model):
             if current_day <= end_date:
                 end_date = current_day - timedelta(days=1)
 
-            working_hours = employee.get_working_hours(start_date, end_date)
-            worked_hours = sheet.get_worked_hours(start_date, end_date)
-            sheet.timesheet_overtime = worked_hours - working_hours
+            working_time = employee.get_working_time(start_date, end_date)
+            worked_time = sheet.get_worked_time(start_date, end_date)
+            sheet.timesheet_overtime = worked_time - working_time
