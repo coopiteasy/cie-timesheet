@@ -21,14 +21,11 @@ class HrEmployee(models.Model):
         string="Initial Overtime",
         default=0.0,
         help="Initial Overtime to start Overtime Start Date with",
-        groups="hr.group_hr_user",
     )
     total_overtime = fields.Float(
         string="Total Overtime",
         compute="_compute_total_overtime",
         help="Total Overtime since Overtime Start Date",
-        # this field has no groups restriction because an employee should be
-        # able to access their own total overtime.
     )
     timesheet_sheet_ids = fields.One2many(
         comodel_name="hr_timesheet.sheet",
@@ -42,7 +39,6 @@ class HrEmployee(models.Model):
         required=True,
         default=date.today().replace(month=1, day=1),
         help="Overtime Start Date to compute overtime",
-        groups="hr.group_hr_user",
     )
 
     @api.multi
