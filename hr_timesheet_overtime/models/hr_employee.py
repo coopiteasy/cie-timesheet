@@ -5,8 +5,7 @@ from datetime import date, datetime, timedelta
 
 from pytz import timezone
 
-from odoo import _, api, fields, models
-from odoo.exceptions import AccessError
+from odoo import api, fields, models
 
 
 class HrEmployee(models.Model):
