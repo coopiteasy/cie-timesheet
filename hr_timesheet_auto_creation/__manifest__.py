@@ -3,7 +3,7 @@
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
-    "name": "HR TimeSheet Auto Creation",
+    "name": "HR TimeSheet - Auto Creation",
     "summary": "Create weekly timesheets for employees automatically",
     "version": "12.0.1.0.1",
     "category": "Human Resources",
