@@ -28,7 +28,8 @@ class HrEmployee(models.Model):
         string="Total Overtime",
         compute="_compute_total_overtime",
         help="Total Overtime since Overtime Start Date",
-        groups="hr.group_hr_user",
+        # this field has no groups restriction because an employee should be
+        # able to access their own total overtime.
     )
     timesheet_sheet_ids = fields.One2many(
         comodel_name="hr_timesheet.sheet",
