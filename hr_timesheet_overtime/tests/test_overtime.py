@@ -3,6 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from datetime import date
 
+from freezegun import freeze_time
+
 from odoo.tests.common import SavepointCase
 
 
@@ -339,3 +341,83 @@ class TestOvertime(SavepointCase):
         self.assertEqual(ts2.timesheet_overtime, 5)
         self.assertEqual(ts2.total_overtime, 1)
         self.assertEqual(self.employee1.total_overtime, 1)
+
+    # The subsequent tests verify whether the stored fields respond correctly to
+    # changing variables.
+
+    def test_stored_change_contract_date_start(self):
+        """When contract_id.date_start is changed, adjust correctly."""
+        # These initial assertions are not repeated in subsequent tests.
+        self.assertEqual(self.ts1.timesheet_overtime_trimmed, 1)
+        self.assertEqual(self.ts1.timesheet_overtime, 1)
+        self.assertEqual(self.ts1.total_overtime, 1)
+        self.assertEqual(self.ts1.working_time, 9 * 5)
+        self.contract1.date_start = date(2019, 12, 3)
+        self.assertEqual(self.ts1.timesheet_overtime_trimmed, 10)
+        self.assertEqual(self.ts1.timesheet_overtime, 10)
+        self.assertEqual(self.ts1.total_overtime, 10)
+        self.assertEqual(self.ts1.working_time, 9 * 4)
+
+    def test_stored_change_contract_date_end(self):
+        """When contract_id.date_end is changed, adjust correctly."""
+        self.contract1.date_end = date(2019, 12, 5)
+        self.assertEqual(self.ts1.timesheet_overtime_trimmed, 10)
+        self.assertEqual(self.ts1.timesheet_overtime, 10)
+        self.assertEqual(self.ts1.total_overtime, 10)
+        self.assertEqual(self.ts1.working_time, 9 * 4)
+
+    def test_stored_change_attendance_hour_to(self):
+        """When contract_id.resource_calendar_id.attendance_ids.hour_to is changed,
+        adjust correctly.
+        """
+        self.contract1.resource_calendar_id.attendance_ids[0].hour_to = 17
+        self.assertEqual(self.ts1.timesheet_overtime_trimmed, 2)
+        self.assertEqual(self.ts1.timesheet_overtime, 2)
+        self.assertEqual(self.ts1.total_overtime, 2)
+        self.assertEqual(self.ts1.working_time, 9 * 5 - 1)
+
+    def test_stored_change_attendance_hour_from(self):
+        """When contract_id.resource_calendar_id.attendance_ids.hour_from is changed,
+        adjust correctly.
+        """
+        self.contract1.resource_calendar_id.attendance_ids[0].hour_from = 10
+        self.assertEqual(self.ts1.timesheet_overtime_trimmed, 2)
+        self.assertEqual(self.ts1.timesheet_overtime, 2)
+        self.assertEqual(self.ts1.total_overtime, 2)
+        self.assertEqual(self.ts1.working_time, 9 * 5 - 1)
+
+    def test_stored_change_initial_overtime(self):
+        """When employee_id.initial_overtime is changed, adjust accordingly."""
+        self.employee1.initial_overtime = 1
+        self.assertEqual(self.ts1.total_overtime, 2)
+
+    def test_stored_change_overtime_start_date(self):
+        """When employee_id.overtime_start_date is changed, adjust accordingly."""
+        self.employee1.overtime_start_date = date(2020, 1, 1)
+        # No matching records.
+        self.assertEqual(self.ts1.total_overtime, 0)
+
+    def test_stored_change_today(self):
+        """When today is changed, adjust accordingly."""
+        # More hours of work in the week
+        line = self.env["account.analytic.line"].search(
+            [
+                ("date", "=", "2019-12-4"),
+                ("sheet_id", "=", self.ts1.id),
+            ]
+        )
+        line.unit_amount = 10
+        self.assertEqual(self.ts1.timesheet_overtime_trimmed, 2)
+        self.assertEqual(self.ts1.timesheet_overtime, 2)
+        self.assertEqual(self.ts1.total_overtime, 2)
+        self.assertEqual(self.ts1.working_time, 9 * 5)
+
+        # Time travel into the past before the overtime.
+        with freeze_time("2019-12-3"):
+            self.ts1.company_id.cron_update_today()
+            # Not affected by the extra overtime
+            self.assertEqual(self.ts1.timesheet_overtime_trimmed, 1)
+            self.assertEqual(self.ts1.total_overtime, 1)
+            self.assertEqual(self.ts1.working_time, 9 * 5)
+            # Affected by the extra overtime
+            self.assertEqual(self.ts1.timesheet_overtime, 2)

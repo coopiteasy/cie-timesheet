@@ -26,6 +26,7 @@ class HrEmployee(models.Model):
         string="Total Overtime",
         compute="_compute_total_overtime",
         help="Total Overtime since Overtime Start Date",
+        store=True,
     )
     timesheet_sheet_ids = fields.One2many(
         comodel_name="hr_timesheet.sheet",
@@ -76,7 +77,11 @@ class HrEmployee(models.Model):
             employee.current_day_working_time = employee.get_working_time(current_day)
 
     @api.multi
-    @api.depends("timesheet_sheet_ids.active")
+    @api.depends(
+        "initial_overtime",
+        "overtime_start_date",
+        "timesheet_sheet_ids.timesheet_overtime_trimmed",
+    )
     def _compute_total_overtime(self):
         """
         Computes total overtime since employee's overtime start date
