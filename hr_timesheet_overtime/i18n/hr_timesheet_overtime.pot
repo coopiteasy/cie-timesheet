@@ -92,11 +92,6 @@ msgid "Friday"
 msgstr ""
 
 #. module: hr_timesheet_overtime
-#: model:ir.model.fields,field_description:hr_timesheet_overtime.field_hr_employee___has_overtime_access
-msgid "Has access to overtime page"
-msgstr ""
-
-#. module: hr_timesheet_overtime
 #: model:ir.model.fields,help:hr_timesheet_overtime.field_hr_employee__current_day_working_hours
 #: model:ir.model.fields,help:hr_timesheet_overtime.field_hr_timesheet_sheet__daily_working_hours
 msgid "Hours to work for the current day"
@@ -148,6 +143,7 @@ msgid "Name"
 msgstr ""
 
 #. module: hr_timesheet_overtime
+#: model:ir.ui.menu,name:hr_timesheet_overtime.menu_hr_timesheet_overtime
 #: model_terms:ir.ui.view,arch_db:hr_timesheet_overtime.hr_timesheet_overtime_view_employee_form
 msgid "Overtime"
 msgstr ""
@@ -155,7 +151,7 @@ msgstr ""
 #. module: hr_timesheet_overtime
 #: model:ir.actions.act_window,name:hr_timesheet_overtime.action_resource_overtime_form
 #: model:ir.model.fields,field_description:hr_timesheet_overtime.field_resource_overtime__rate_ids
-#: model:ir.ui.menu,name:hr_timesheet_overtime.menu_hr_overtime_rate
+#: model:ir.ui.menu,name:hr_timesheet_overtime.menu_hr_timesheet_overtime_rate
 #: model:ir.ui.menu,name:hr_timesheet_overtime.menu_resource_overtime
 #: model_terms:ir.ui.view,arch_db:hr_timesheet_overtime.resource_overtime_form
 #: model_terms:ir.ui.view,arch_db:hr_timesheet_overtime.view_resource_overtime_rate_form
@@ -278,11 +274,5 @@ msgstr ""
 #. module: hr_timesheet_overtime
 #: model:ir.model.fields,field_description:hr_timesheet_overtime.field_resource_overtime__manager
 msgid "Workgroup Manager"
-msgstr ""
-
-#. module: hr_timesheet_overtime
-#: code:addons/hr_timesheet_overtime/models/hr_employee.py:137
-#, python-format
-msgid "You do not have the permission to modify this field."
 msgstr ""
 
