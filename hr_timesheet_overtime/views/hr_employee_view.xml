@@ -10,14 +10,9 @@
         <field name="inherit_id" ref="hr.view_employee_form" />
         <field name="arch" type="xml">
             <xpath expr="//notebook" position="inside">
-                <page
-                    name="overtime"
-                    string="Overtime"
-                    attrs="{'invisible': [('_has_overtime_access', '=', False)]}"
-                >
+                <page name="overtime" string="Overtime" groups="hr.group_hr_user">
                     <group>
                         <group name="overtime" string="Overtime">
-                            <field name="_has_overtime_access" invisible="True" />
                             <field name="initial_overtime" widget="float_time" />
                             <field name="total_overtime" widget="float_time" />
                             <field name="overtime_start_date" />
