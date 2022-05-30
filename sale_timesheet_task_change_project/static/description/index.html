@@ -370,6 +370,14 @@ ul.auto-toc {
 <p><a class="reference external" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external" href="https://github.com/coopiteasy/cie-timesheet/tree/12.0/sale_timesheet_task_change_project"><img alt="coopiteasy/cie-timesheet" src="https://img.shields.io/badge/github-coopiteasy%2Fcie--timesheet-lightgray.png?logo=github" /></a></p>
 <p>Handle the links between sale order lines and timesheets when changing the
 project of a timesheet of a task.</p>
+<p>If the project of timesheet is equal to the project of the task to which it is
+linked, then the timesheet is linked to the sale order line of the task
+(possibly null).</p>
+<p>If the project of timesheet is not equal to the project of the task to which
+it is linked, then the timesheet is linked to the sale order line of the
+project (possibly null).</p>
+<p>Note: this module ignores the <tt class="docutils literal">billable_type</tt> project and task properties,
+assuming it is always equal to <tt class="docutils literal">&quot;task_rate&quot;</tt>.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">

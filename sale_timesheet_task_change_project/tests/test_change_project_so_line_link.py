@@ -126,7 +126,6 @@ class TestChangeProjectSOLineLink(TransactionCase):
 
     def test_create_with_task_with_project_with_so_with_so_lines(self):
         task = self._create_task(self.project4)
-        # the task so_line comes from the project, so it is null
         self.assertFalse(task.sale_line_id)
         activity = self._create_activity(self.project4, task)
         self.assertFalse(activity.so_line)
@@ -138,7 +137,6 @@ class TestChangeProjectSOLineLink(TransactionCase):
 
     def test_create_with_task_with_project_with_so_line(self):
         task = self._create_task(self.project1)
-        # the task so_line comes from the project
         self.assertEqual(task.sale_line_id, self.sol1_2)
         activity = self._create_activity(self.project1, task)
         self.assertEqual(activity.so_line, self.sol1_2)
@@ -264,6 +262,22 @@ class TestChangeProjectSOLineLink(TransactionCase):
         task = self._create_task(self.project1)
         activity.write({"project_id": self.project2.id, "task_id": task.id})
         self.assertEqual(activity.so_line, self.sol2_2)
+
+    def test_write_multiple(self):
+        task1 = self._create_task(self.project1, self.sol1_3)
+        activity1 = self._create_activity(self.project2, task1)
+        task2 = self._create_task(self.project2)
+        activity2 = self._create_activity(self.project2, task2)
+        task3 = self._create_task(self.project1)
+        task3.sale_line_id = False
+        activity3 = self._create_activity(self.project2, task3)
+        activities = self.env["account.analytic.line"].browse(
+            (activity1.id, activity2.id, activity3.id)
+        )
+        activities.write({"project_id": self.project1.id})
+        self.assertEqual(activity1.so_line, self.sol1_3)
+        self.assertEqual(activity2.so_line, self.sol1_2)
+        self.assertFalse(activity3.so_line)
 
     def _create_task(self, project, so_line=None):
         task_dict = {"name": "task1", "project_id": project.id}

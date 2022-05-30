@@ -12,6 +12,8 @@ class AccountAnalyticLine(models.Model):
     def write(self, vals):
         result = True
         for rec in self:
+            # the sale order line depends on the task and the project, so it can be
+            # different for each rec and must be computed individually.
             rec_vals = vals.copy()
             self._adjust_so_line_link_write_vals(rec, rec_vals)
             # it must be an explicit super(), because it must be run on rec, not self.
