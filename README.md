@@ -28,6 +28,7 @@ addon | version | maintainers | summary
 [hr_timesheet_sheet_tag](hr_timesheet_sheet_tag/) | 12.0.1.0.0 |  | Tag your analytic line in the timesheet sheet view.
 [hr_timesheet_tag](hr_timesheet_tag/) | 12.0.1.0.0 |  | Tag your timesheet activity.
 [hr_timesheet_task_change_project](hr_timesheet_task_change_project/) | 12.0.1.0.0 |  | Allow to change the project of a timesheet of a task.
+[sale_timesheet_task_change_project](sale_timesheet_task_change_project/) | 12.0.1.0.0 |  | Handle the links between sale order lines and timesheets when changing the project of a timesheet of a task.
 
 [//]: # (end addons)
 
