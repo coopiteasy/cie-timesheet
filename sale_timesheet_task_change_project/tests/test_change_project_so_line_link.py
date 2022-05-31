@@ -290,6 +290,7 @@ class TestChangeProjectSOLineLink(TransactionCase):
             "name": "activity",
             "unit_amount": 1.0,
             "employee_id": self.employee1.id,
+            "date": "2022-05-26",
         }
         if project:
             activity_dict["project_id"] = project.id
