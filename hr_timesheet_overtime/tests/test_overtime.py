@@ -3,32 +3,33 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from datetime import date
 
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import SavepointCase
 
 
-class TestOvertime(TransactionCase):
-    def setUp(self):
-        super().setUp()
+class TestOvertime(SavepointCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
         # users
         user1_dict = {"name": "User 1", "login": "user1", "password": "user1"}
-        self.user1 = self.env["res.users"].create(user1_dict)
+        cls.user1 = cls.env["res.users"].create(user1_dict)
 
         # employees
         employee1_dict = {
             "name": "Employee 1",
-            "user_id": self.user1.id,
-            "address_id": self.user1.partner_id.id,
+            "user_id": cls.user1.id,
+            "address_id": cls.user1.partner_id.id,
             "overtime_start_date": "2019-01-01",
         }
-        self.employee1 = self.env["hr.employee"].create(employee1_dict)
+        cls.employee1 = cls.env["hr.employee"].create(employee1_dict)
 
         # working hours
         # calendar have default attendance_ids, force it to have none.
-        calendar = self.env["resource.calendar"].create(
+        calendar = cls.env["resource.calendar"].create(
             {"name": "Calendar", "attendance_ids": False}
         )
         for day in range(5):
-            self.env["resource.calendar.attendance"].create(
+            cls.env["resource.calendar.attendance"].create(
                 {
                     "name": "Attendance",
                     "dayofweek": str(day),
@@ -41,49 +42,49 @@ class TestOvertime(TransactionCase):
         # contracts
         contract_dict = {
             "name": "Contract 1",
-            "employee_id": self.employee1.id,
+            "employee_id": cls.employee1.id,
             "wage": 0.0,
             "resource_calendar_id": calendar.id,
             "date_start": "2019-01-01",
         }
 
-        self.contract1 = self.env["hr.contract"].create(contract_dict)
+        cls.contract1 = cls.env["hr.contract"].create(contract_dict)
 
         # projects
-        self.project_01 = self.env["project.project"].create({"name": "Project 01"})
+        cls.project_01 = cls.env["project.project"].create({"name": "Project 01"})
 
         # create ts
         ts1_dict = {
-            "employee_id": self.employee1.id,
+            "employee_id": cls.employee1.id,
             "date_start": "2019-12-02",
             "date_end": "2019-12-08",
         }
-        self.ts1 = self.env["hr_timesheet.sheet"].create(ts1_dict)
+        cls.ts1 = cls.env["hr_timesheet.sheet"].create(ts1_dict)
 
         # create and link aal
         # monday 02/12/2019
-        self.env["account.analytic.line"].create(
+        cls.env["account.analytic.line"].create(
             {
-                "project_id": self.project_01.id,
+                "project_id": cls.project_01.id,
                 "amount": 0.0,
                 "date": "2019-12-02",
                 "name": "-",
-                "sheet_id": self.ts1.id,
+                "sheet_id": cls.ts1.id,
                 "unit_amount": 10.0,  # 1 hour overtime
-                "user_id": self.employee1.user_id.id,
+                "user_id": cls.employee1.user_id.id,
             }
         )
         # tuesday 03/12/2019 -> friday 06/12/2019
         for day in range(3, 7):
-            self.env["account.analytic.line"].create(
+            cls.env["account.analytic.line"].create(
                 {
-                    "project_id": self.project_01.id,
+                    "project_id": cls.project_01.id,
                     "amount": 0.0,
                     "date": date(2019, 12, day),
                     "name": "-",
-                    "sheet_id": self.ts1.id,
+                    "sheet_id": cls.ts1.id,
                     "unit_amount": 9.0,  # expected time
-                    "user_id": self.employee1.user_id.id,
+                    "user_id": cls.employee1.user_id.id,
                 }
             )
 
