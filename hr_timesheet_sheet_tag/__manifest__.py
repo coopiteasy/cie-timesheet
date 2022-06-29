@@ -1,4 +1,4 @@
-# Copyright 2020 Coop IT Easy SCRLfs (http://coopiteasy.be)
+# Copyright 2020 Coop IT Easy SC (http://coopiteasy.be)
 #   Rémy Taymans <remy@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -8,7 +8,7 @@
         Tag your analytic line in the timesheet sheet view.""",
     "version": "12.0.1.0.0",
     "license": "AGPL-3",
-    "author": "Coop IT Easy SCRLfs",
+    "author": "Coop IT Easy SC",
     "website": "https://coopiteasy.be",
     "depends": ["hr_timesheet_sheet"],
     "data": ["views/hr_timesheet_sheet.xml"],

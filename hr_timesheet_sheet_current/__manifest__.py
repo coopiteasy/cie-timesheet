@@ -7,7 +7,7 @@
         Allow to access the current timesheet sheet directly from the menu""",
     "version": "12.0.1.0.0",
     "license": "AGPL-3",
-    "author": "Coop IT Easy SCRLfs",
+    "author": "Coop IT Easy SC",
     "website": "https://coopiteasy.be",
     "depends": [
         "hr_timesheet_sheet",

@@ -1,4 +1,4 @@
-# Copyright 2020 Coop IT Easy SCRLfs
+# Copyright 2020 Coop IT Easy SC
 #   - Vincent Van Rossem <vincent@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import fields, models
