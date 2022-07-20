@@ -14,10 +14,16 @@ class HrTimesheetSheet(models.Model):
 
     active = fields.Boolean("Active", default=True)
     # Numeric fields
-    daily_working_hours = fields.Float(
+    daily_working_time = fields.Float(
         "Daily Working Hours",
-        related="employee_id.current_day_working_hours",
+        related="employee_id.current_day_working_time",
         help="Hours to work for the current day",
+    )
+    working_time = fields.Float(
+        "Working Hours",
+        compute="_compute_working_time",
+        help="Hours to work for the timesheet period",
+        store=True,
     )
     daily_overtime = fields.Float(
         "Daily Overtime",
@@ -28,6 +34,14 @@ class HrTimesheetSheet(models.Model):
         "Timesheet Overtime",
         compute="_compute_timesheet_overtime",
         help="Overtime for this timesheet period",
+        store=True,
+    )
+    timesheet_overtime_trimmed = fields.Float(
+        "Trimmed Timesheet Overtime",
+        compute="_compute_timesheet_overtime_trimmed",
+        help="Overtime for this timesheet period, from the employee's start date until"
+        " today",
+        store=True,
     )
     total_overtime = fields.Float(
         "Overtime Total",
@@ -35,7 +49,7 @@ class HrTimesheetSheet(models.Model):
         help="Overtime total since employee's overtime start date",
     )
 
-    def get_worked_hours(self, start_date, end_date=None):
+    def get_worked_time(self, start_date, end_date=None):
         """
         Get total of worked hours from account analytic lines
         for a given date range
@@ -56,18 +70,72 @@ class HrTimesheetSheet(models.Model):
         return sum(line.unit_amount for line in aal)
 
     @api.multi
+    @api.depends(
+        "active",
+        "date_start",
+        "date_end",
+        "employee_id",
+        "employee_id.contract_ids",
+        "employee_id.contract_ids.date_start",
+        "employee_id.contract_ids.date_end",
+        "employee_id.contract_ids.resource_calendar_id",
+        "employee_id.contract_ids.resource_calendar_id.attendance_ids",
+        "employee_id.contract_ids.resource_calendar_id.attendance_ids.dayofweek",
+        "employee_id.contract_ids.resource_calendar_id.attendance_ids.hour_from",
+        "employee_id.contract_ids.resource_calendar_id.attendance_ids.hour_to",
+        "employee_id.resource_calendar_id",
+        "employee_id.resource_calendar_id.attendance_ids",
+        "employee_id.resource_calendar_id.attendance_ids.dayofweek",
+        "employee_id.resource_calendar_id.attendance_ids.hour_from",
+        "employee_id.resource_calendar_id.attendance_ids.hour_to",
+    )
+    def _compute_working_time(self):
+        for sheet in self:
+            sheet.working_time = sheet.employee_id.get_working_time(
+                sheet.date_start, sheet.date_end
+            )
+
+    @api.multi
     def _compute_daily_overtime(self):
         """
         Computes overtime for the current day
         """
         current_day = date.today()
         for sheet in self:
-            working_hours = sheet.employee_id.get_working_hours(current_day)
-            worked_hours = sheet.get_worked_hours(current_day)
-            sheet.daily_overtime = worked_hours - working_hours
+            working_time = sheet.employee_id.get_working_time(current_day)
+            worked_time = sheet.get_worked_time(current_day)
+            sheet.daily_overtime = worked_time - working_time
 
     @api.multi
+    @api.depends("total_time", "working_time")
     def _compute_timesheet_overtime(self):
+        for sheet in self:
+            sheet.timesheet_overtime = sheet.total_time - sheet.working_time
+
+    @api.multi
+    @api.depends(
+        "active",
+        "date_start",
+        "date_end",
+        "company_id.today",
+        "employee_id",
+        "employee_id.contract_ids",
+        "employee_id.contract_ids.date_end",
+        "employee_id.contract_ids.date_start",
+        "employee_id.contract_ids.resource_calendar_id",
+        "employee_id.contract_ids.resource_calendar_id.attendance_ids",
+        "employee_id.contract_ids.resource_calendar_id.attendance_ids.dayofweek",
+        "employee_id.contract_ids.resource_calendar_id.attendance_ids.hour_from",
+        "employee_id.contract_ids.resource_calendar_id.attendance_ids.hour_to",
+        "employee_id.overtime_start_date",
+        "employee_id.resource_calendar_id",
+        "employee_id.resource_calendar_id.attendance_ids",
+        "employee_id.resource_calendar_id.attendance_ids.dayofweek",
+        "employee_id.resource_calendar_id.attendance_ids.hour_from",
+        "employee_id.resource_calendar_id.attendance_ids.hour_to",
+        "timesheet_ids.unit_amount",
+    )
+    def _compute_timesheet_overtime_trimmed(self):
         """
         Computes overtime for the timesheet period
         (from the start date (included) to the current date (not included))
@@ -78,13 +146,13 @@ class HrTimesheetSheet(models.Model):
             start_date = sheet.date_start
             end_date = sheet.date_end
             if current_day < start_date or employee.overtime_start_date > end_date:
-                sheet.timesheet_overtime = 0.0
+                sheet.timesheet_overtime_trimmed = 0.0
                 continue
             if employee.overtime_start_date > start_date:
                 start_date = employee.overtime_start_date
             if current_day <= end_date:
                 end_date = current_day - timedelta(days=1)
 
-            working_hours = employee.get_working_hours(start_date, end_date)
-            worked_hours = sheet.get_worked_hours(start_date, end_date)
-            sheet.timesheet_overtime = worked_hours - working_hours
+            working_time = employee.get_working_time(start_date, end_date)
+            worked_time = sheet.get_worked_time(start_date, end_date)
+            sheet.timesheet_overtime_trimmed = worked_time - working_time

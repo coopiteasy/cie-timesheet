@@ -58,11 +58,35 @@
             </xpath>
 
             <xpath expr="//group/group/label[@for='date_start']" position="before">
-                <field name="daily_working_hours" widget="float_time" />
-                <field name="daily_overtime" widget="float_time" />
-                <field name="total_overtime" widget="float_time" />
+                <field name="daily_working_time" widget="float_time" />
+                <field
+                    name="daily_overtime"
+                    widget="float_time"
+                    decoration-warning="daily_overtime &lt; 0"
+                    decoration-info="daily_overtime &gt;= 0"
+                />
+                <field
+                    name="total_overtime"
+                    widget="float_time"
+                    decoration-warning="total_overtime &lt; 0"
+                    decoration-info="total_overtime &gt;= 0"
+                />
             </xpath>
 
+        </field>
+    </record>
+
+    <record id="hr_timesheet_sheet_tree" model="ir.ui.view">
+        <field name="name">hr.timesheet.sheet.tree</field>
+        <field name="model">hr_timesheet.sheet</field>
+        <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_tree" />
+        <field name="arch" type="xml">
+            <field name="total_time" position="before">
+                <field name="working_time" widget="float_time" />
+            </field>
+            <field name="total_time" position="after">
+                <field name="timesheet_overtime" widget="float_time" />
+            </field>
         </field>
     </record>
 
