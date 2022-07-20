@@ -10,6 +10,7 @@
     "website": "https://coopiteasy.be",
     "license": "AGPL-3",
     "depends": [
+        "company_today",
         "hr_timesheet_sheet",
         "resource_work_time_from_contracts",
     ],
