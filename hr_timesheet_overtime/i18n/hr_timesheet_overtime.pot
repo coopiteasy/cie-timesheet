@@ -51,7 +51,7 @@ msgid "Created on"
 msgstr ""
 
 #. module: hr_timesheet_overtime
-#: model:ir.model.fields,field_description:hr_timesheet_overtime.field_hr_employee__current_day_working_hours
+#: model:ir.model.fields,field_description:hr_timesheet_overtime.field_hr_employee__current_day_working_time
 msgid "Current Day Working Hours"
 msgstr ""
 
@@ -61,7 +61,7 @@ msgid "Daily Overtime"
 msgstr ""
 
 #. module: hr_timesheet_overtime
-#: model:ir.model.fields,field_description:hr_timesheet_overtime.field_hr_timesheet_sheet__daily_working_hours
+#: model:ir.model.fields,field_description:hr_timesheet_overtime.field_hr_timesheet_sheet__daily_working_time
 msgid "Daily Working Hours"
 msgstr ""
 
@@ -92,9 +92,14 @@ msgid "Friday"
 msgstr ""
 
 #. module: hr_timesheet_overtime
-#: model:ir.model.fields,help:hr_timesheet_overtime.field_hr_employee__current_day_working_hours
-#: model:ir.model.fields,help:hr_timesheet_overtime.field_hr_timesheet_sheet__daily_working_hours
+#: model:ir.model.fields,help:hr_timesheet_overtime.field_hr_employee__current_day_working_time
+#: model:ir.model.fields,help:hr_timesheet_overtime.field_hr_timesheet_sheet__daily_working_time
 msgid "Hours to work for the current day"
+msgstr ""
+
+#. module: hr_timesheet_overtime
+#: model:ir.model.fields,help:hr_timesheet_overtime.field_hr_timesheet_sheet__working_time
+msgid "Hours to work for the timesheet period"
 msgstr ""
 
 #. module: hr_timesheet_overtime
@@ -187,6 +192,11 @@ msgid "Overtime for this timesheet period"
 msgstr ""
 
 #. module: hr_timesheet_overtime
+#: model:ir.model.fields,help:hr_timesheet_overtime.field_hr_timesheet_sheet__timesheet_overtime_trimmed
+msgid "Overtime for this timesheet period, from the employee's start date until today"
+msgstr ""
+
+#. module: hr_timesheet_overtime
 #: model:ir.model.fields,help:hr_timesheet_overtime.field_hr_timesheet_sheet__total_overtime
 msgid "Overtime total since employee's overtime start date"
 msgstr ""
@@ -262,6 +272,11 @@ msgid "Total Overtime since Overtime Start Date"
 msgstr ""
 
 #. module: hr_timesheet_overtime
+#: model:ir.model.fields,field_description:hr_timesheet_overtime.field_hr_timesheet_sheet__timesheet_overtime_trimmed
+msgid "Trimmed Timesheet Overtime"
+msgstr ""
+
+#. module: hr_timesheet_overtime
 #: selection:resource.overtime.rate,dayofweek:0
 msgid "Tuesday"
 msgstr ""
@@ -274,5 +289,10 @@ msgstr ""
 #. module: hr_timesheet_overtime
 #: model:ir.model.fields,field_description:hr_timesheet_overtime.field_resource_overtime__manager
 msgid "Workgroup Manager"
+msgstr ""
+
+#. module: hr_timesheet_overtime
+#: model:ir.model.fields,field_description:hr_timesheet_overtime.field_hr_timesheet_sheet__working_time
+msgid "Working Hours"
 msgstr ""
 
