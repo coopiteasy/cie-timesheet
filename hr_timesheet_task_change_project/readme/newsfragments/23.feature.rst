@@ -1,1 +1,0 @@
-Prevent creation of projects from tasks when timesheeting.
