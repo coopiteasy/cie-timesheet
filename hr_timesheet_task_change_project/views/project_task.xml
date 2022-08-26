@@ -29,6 +29,7 @@
                 position="attributes"
             >
                 <attribute name="invisible" />
+                <attribute name="options">{'no_create': True}</attribute>
                 <attribute name="required">1</attribute>
             </xpath>
         </field>
