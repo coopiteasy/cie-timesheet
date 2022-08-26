@@ -4,7 +4,7 @@
 {
     "name": "Change Task Timesheet Project",
     "summary": "Allow to change the project of a timesheet of a task.",
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.1",
     "category": "Human Resources",
     "website": "https://coopiteasy.be",
     "author": "Coop IT Easy SC",
