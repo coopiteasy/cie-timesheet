@@ -77,11 +77,11 @@ class HrEmployee(models.Model):
             employee.current_day_working_time = employee.get_working_time(current_day)
 
     @api.multi
-    @api.depends(
-        "initial_overtime",
-        "overtime_start_date",
-        "timesheet_sheet_ids.timesheet_overtime_trimmed",
-    )
+    # @api.depends(
+    #     "initial_overtime",
+    #     "overtime_start_date",
+    #     "timesheet_sheet_ids.timesheet_overtime_trimmed",
+    # )
     def _compute_total_overtime(self):
         """
         Computes total overtime since employee's overtime start date
@@ -95,3 +95,8 @@ class HrEmployee(models.Model):
             )
             overtime = sum(sheet.timesheet_overtime_trimmed for sheet in sheets)
             employee.total_overtime = employee.initial_overtime + overtime
+
+    @api.model
+    def cron_compute_total_overtime(self):
+        for employee in self.env["hr.employee"].search([]):
+            employee._compute_total_overtime()

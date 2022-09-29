@@ -19,6 +19,7 @@
         "views/hr_employee_view.xml",
         "views/resource_view.xml",
         "views/hr_timesheet_sheet_view.xml",
+        "data/cron.xml",
     ],
     "demo": [
         "demo/hr_contract_demo.xml",
