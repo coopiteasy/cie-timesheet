@@ -5,7 +5,7 @@
 {
     "name": "HR TimeSheet Auto Creation",
     "summary": "Create weekly timesheets for employees automatically",
-    "version": "15.0.1.0.1",
+    "version": "16.0.1.0.1",
     "category": "Human Resources",
     "author": "Coop IT Easy SC, Elico Corp",
     "license": "AGPL-3",
