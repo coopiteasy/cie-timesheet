@@ -9,7 +9,7 @@
     "category": "Human Resources",
     "author": "Coop IT Easy SC, Elico Corp",
     "license": "AGPL-3",
-    "website": "https://coopiteasy.be",
+    "website": "https://github.com/coopiteasy/cie-timesheet",
     "depends": [
         "hr_timesheet_sheet",
     ],
