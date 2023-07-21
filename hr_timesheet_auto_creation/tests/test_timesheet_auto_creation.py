@@ -9,22 +9,21 @@ from odoo.tests import common
 
 
 class TestHrTimesheetSheet(common.TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.env["hr.employee"].search([]).write({"user_id": False})
-        self.tms_obj = self.env["hr_timesheet.sheet"]
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env["hr.employee"].search([]).write({"user_id": False})
+        cls.tms_obj = cls.env["hr_timesheet.sheet"]
         today = date.today()
-        self.monday = today + timedelta(days=-today.weekday())
-        self.sunday = self.monday + timedelta(days=6)
+        cls.monday = today + timedelta(days=-today.weekday())
+        cls.sunday = cls.monday + timedelta(days=6)
 
-        self.user1 = self.env.ref("base.user_root").copy({"login": "test1"})
-        self.employee1 = self.env.ref("hr.employee_ngh")
-        self.employee1.user_id = self.user1.id
+        cls.user1 = cls.env.ref("base.user_root").copy({"login": "test1"})
+        cls.employee1 = cls.env.ref("hr.employee_ngh")
+        cls.employee1.user_id = cls.user1.id
 
-        self.user2 = self.user1.copy({"login": "test2"})
-        self.employee2 = self.env.ref("hr.employee_vad").copy(
-            {"user_id": self.user2.id}
-        )
+        cls.user2 = cls.user1.copy({"login": "test2"})
+        cls.employee2 = cls.env.ref("hr.employee_vad").copy({"user_id": cls.user2.id})
 
     def test_create_employee_timesheet(self):
         """Check timesheet has been created automatically for the week."""
