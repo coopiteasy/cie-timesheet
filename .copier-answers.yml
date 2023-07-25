@@ -12,7 +12,7 @@ github_enable_stale_action: true
 github_enforce_dev_status_compatibility: true
 include_wkhtmltopdf: false
 odoo_version: 16.0
-org_name: Coop IT Easy
+org_name: Coop IT Easy SC
 org_slug: coopiteasy
 rebel_module_groups: []
 repo_description: hr_timesheet modules
