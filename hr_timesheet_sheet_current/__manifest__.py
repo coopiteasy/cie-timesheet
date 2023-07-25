@@ -5,7 +5,7 @@
     "name": "My Current Timesheet Sheet",
     "summary": """
         Allow to access the current timesheet sheet directly from the menu""",
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "license": "AGPL-3",
     "author": "Coop IT Easy SC",
     "website": "https://github.com/coopiteasy/cie-timesheet",
