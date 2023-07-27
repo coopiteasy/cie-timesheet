@@ -8,7 +8,7 @@
         Prevent creation of projects and tasks from timesheets.""",
     "version": "12.0.1.0.0",
     "category": "Human Resources",
-    "website": "https://coopiteasy.be",
+    "website": "https://github.com/coopiteasy/cie-timesheet",
     "author": "Coop IT Easy SC",
     "maintainers": ["carmenbianca"],
     "license": "AGPL-3",
