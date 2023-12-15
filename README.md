@@ -17,7 +17,11 @@ hr_timesheet modules
 
 [//]: # (addons)
 
-This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
+Available addons
+----------------
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[hr_timesheet_auto_creation](hr_timesheet_auto_creation/) | 16.0.1.0.1 |  | Create weekly timesheets for employees automatically
 
 [//]: # (end addons)
 
