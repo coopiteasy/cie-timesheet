@@ -39,7 +39,6 @@ class HrEmployee(models.Model):
         help="Overtime Start Date to compute overtime",
     )
 
-    @api.multi
     def get_working_time(self, start_date, end_date=None):
         """
         Get the working hours for a given date range according to the
@@ -63,7 +62,6 @@ class HrEmployee(models.Model):
         # (date, work time)
         return sum(work_time[1] for work_time in work_time_per_day)
 
-    @api.multi
     def _compute_current_day_working_time(self):
         """
         Computes working hours for the current day according to the employee's
@@ -73,7 +71,6 @@ class HrEmployee(models.Model):
         for employee in self:
             employee.current_day_working_time = employee.get_working_time(current_day)
 
-    @api.multi
     @api.depends(
         "initial_overtime",
         "overtime_start_date",

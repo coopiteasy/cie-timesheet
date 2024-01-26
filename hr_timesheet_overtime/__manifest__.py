@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     "name": "Timesheet/Contract - Overtime",
-    "version": "12.0.2.0.0",
+    "version": "13.0.2.0.0",
     "category": "Human Resources",
     "summary": "Overtime Calculation",
     "author": "Coop IT Easy SC, Odoo Community Association (OCA)",

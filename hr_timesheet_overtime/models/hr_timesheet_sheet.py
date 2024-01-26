@@ -65,7 +65,6 @@ class HrTimesheetSheet(models.Model):
         )
         return sum(line.unit_amount for line in aal)
 
-    @api.multi
     @api.depends(
         "active",
         "date_start",
@@ -91,7 +90,6 @@ class HrTimesheetSheet(models.Model):
                 sheet.date_start, sheet.date_end
             )
 
-    @api.multi
     def _compute_daily_overtime(self):
         """
         Computes overtime for the current day
@@ -102,13 +100,11 @@ class HrTimesheetSheet(models.Model):
             worked_time = sheet.get_worked_time(current_day)
             sheet.daily_overtime = worked_time - working_time
 
-    @api.multi
     @api.depends("total_time", "working_time")
     def _compute_timesheet_overtime(self):
         for sheet in self:
             sheet.timesheet_overtime = sheet.total_time - sheet.working_time
 
-    @api.multi
     @api.depends(
         "active",
         "date_start",

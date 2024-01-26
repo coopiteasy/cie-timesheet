@@ -15,18 +15,15 @@ class AnalyticLine(models.Model):
 
     _inherit = "account.analytic.line"
 
-    @api.model
     def create(self, values):
         self._update_values(values)
         return super().create(values)
 
-    @api.multi
     def write(self, values):
         if not self.env.context.get("create"):  # sale module
             self._update_values(values)
         return super().write(values)
 
-    @api.model
     def _update_values(self, values):
         """
         Update values if date or unit_amount fields have changed
