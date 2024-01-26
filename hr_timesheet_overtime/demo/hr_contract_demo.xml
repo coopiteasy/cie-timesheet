@@ -103,7 +103,6 @@
         <field name="employee_id" ref="hr.employee_admin" />
         <field name="job_id" ref="hr.job_ceo" />
         <field name="department_id" ref="hr.dep_management" />
-        <field name="type_id" ref="hr_contract.hr_contract_type_emp" />
         <field name="resource_calendar_id" ref="resource_calendar_part_time1" />
         <field name="wage" eval="0.0" />
         <field name="date_start" eval="datetime.now().date().replace(month=1, day=1)" />
@@ -115,7 +114,6 @@
         <field name="employee_id" ref="hr.employee_admin" />
         <field name="job_id" ref="hr.job_ceo" />
         <field name="department_id" ref="hr.dep_management" />
-        <field name="type_id" ref="hr_contract.hr_contract_type_emp" />
         <field name="resource_calendar_id" ref="resource_calendar_part_time2" />
         <field name="wage" eval="0.0" />
         <field name="date_start" eval="time.strftime('%Y')+'-01-01'" />
