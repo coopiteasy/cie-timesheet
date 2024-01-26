@@ -5,10 +5,10 @@ from datetime import date
 
 from freezegun import freeze_time
 
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
-class TestOvertime(SavepointCase):
+class TestOvertime(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
