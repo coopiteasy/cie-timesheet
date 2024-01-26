@@ -40,18 +40,6 @@
                             <span class="o_stat_text">Timesheet</span>
                         </div>
                     </button>
-                    <button
-                        name="toggle_active"
-                        type="object"
-                        class="oe_stat_button"
-                        icon="fa-check"
-                    >
-                        <field
-                            name="active"
-                            widget="boolean_button"
-                            options='{"terminology": "active"}'
-                        />
-                    </button>
                 </div>
             </xpath>
 
