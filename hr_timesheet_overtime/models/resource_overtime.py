@@ -13,18 +13,18 @@ class ResourceOvertime(models.Model):
 
     # Relational fields
     rate_ids = fields.One2many(
+        string="Overtime Rate",
         comodel_name="resource.overtime.rate",
         inverse_name="overtime_id",
-        string="Overtime Rate",
         copy=True,
     )
     company_id = fields.Many2one(
-        "res.company",
         string="Company",
+        comodel_name="res.company",
         default=lambda self: self.env["res.company"]._company_default_get(),
     )
     manager = fields.Many2one(
-        "res.users",
         string="Workgroup Manager",
+        comodel_name="res.users",
         default=lambda self: self.env.uid,
     )

@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 class HrTimesheetSheet(models.Model):
     _inherit = "hr_timesheet.sheet"
 
-    active = fields.Boolean("Active", default=True)
+    active = fields.Boolean(default=True)
     # Numeric fields
     daily_working_time = fields.Float(
         "Daily Working Hours",
@@ -26,25 +26,21 @@ class HrTimesheetSheet(models.Model):
         store=True,
     )
     daily_overtime = fields.Float(
-        "Daily Overtime",
         compute="_compute_daily_overtime",
         help="Overtime for the current day",
     )
     timesheet_overtime = fields.Float(
-        "Timesheet Overtime",
         compute="_compute_timesheet_overtime",
         help="Overtime for this timesheet period",
         store=True,
     )
     timesheet_overtime_trimmed = fields.Float(
-        "Trimmed Timesheet Overtime",
         compute="_compute_timesheet_overtime_trimmed",
         help="Overtime for this timesheet period, from the employee's start date until"
         " today",
         store=True,
     )
     total_overtime = fields.Float(
-        "Overtime Total",
         related="employee_id.total_overtime",
         help="Overtime total since employee's overtime start date",
     )

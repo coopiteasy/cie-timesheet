@@ -18,25 +18,22 @@ class HrEmployee(models.Model):
         help="Hours to work for the current day",
     )
     initial_overtime = fields.Float(
-        string="Initial Overtime",
         default=0.0,
         help="Initial Overtime to start Overtime Start Date with",
     )
     total_overtime = fields.Float(
-        string="Total Overtime",
         compute="_compute_total_overtime",
         help="Total Overtime since Overtime Start Date",
         store=True,
     )
     timesheet_sheet_ids = fields.One2many(
+        string="Timesheet sheets",
         comodel_name="hr_timesheet.sheet",
         inverse_name="employee_id",
-        string="Timesheet sheets",
     )
 
     # Date fields
     overtime_start_date = fields.Date(
-        string="Overtime Start Date",
         required=True,
         default=date.today().replace(month=1, day=1),
         help="Overtime Start Date to compute overtime",

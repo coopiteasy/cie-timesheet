@@ -36,7 +36,7 @@
         <field name="name">resource.overtime.tree</field>
         <field name="model">resource.overtime</field>
         <field name="arch" type="xml">
-            <tree string="Overtime Rate">
+            <tree>
                 <field name="name" />
                 <field name="manager" />
                 <field name="company_id" groups="base.group_multi_company" />
@@ -63,7 +63,7 @@
         <field name="name">resource.overtime.rate.tree</field>
         <field name="model">resource.overtime.rate</field>
         <field name="arch" type="xml">
-            <tree string="Overtime Rate" editable="top">
+            <tree editable="top">
                 <field name="name" />
                 <field name="dayofweek" />
                 <field name="rate" />

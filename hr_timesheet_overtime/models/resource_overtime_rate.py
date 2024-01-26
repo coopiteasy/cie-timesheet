@@ -12,7 +12,8 @@ class ResourceOvertimeRate(models.Model):
     # String fields
     name = fields.Char(required=True)
     dayofweek = fields.Selection(
-        [
+        string="Day of Week",
+        selection=[
             ("0", "Monday"),
             ("1", "Tuesday"),
             ("2", "Wednesday"),
@@ -21,13 +22,12 @@ class ResourceOvertimeRate(models.Model):
             ("5", "Saturday"),
             ("6", "Sunday"),
         ],
-        "Day of Week",
         required=True,
         index=True,
     )
 
     # Numeric fields
-    rate = fields.Float("Rate", default="1.00", digits=(3, 2))
+    rate = fields.Float(default="1.00", digits=(3, 2))
     overtime_id = fields.Many2one(
         "resource.overtime",
         string="Resource's Overtime",

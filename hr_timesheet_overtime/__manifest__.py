@@ -7,7 +7,7 @@
     "category": "Human Resources",
     "summary": "Overtime Calculation",
     "author": "Coop IT Easy SC, Odoo Community Association (OCA)",
-    "website": "https://coopiteasy.be",
+    "website": "https://github.com/coopiteasy/cie-timesheet",
     "license": "AGPL-3",
     "depends": [
         "company_today",
