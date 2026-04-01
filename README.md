@@ -23,12 +23,12 @@ addon | version | maintainers | summary
 --- | --- | --- | ---
 [hr_timesheet_auto_creation](hr_timesheet_auto_creation/) | 12.0.1.0.1 |  | Create weekly timesheets for employees automatically
 [hr_timesheet_overtime](hr_timesheet_overtime/) | 12.0.2.2.0 |  | Overtime Calculation
-[hr_timesheet_overtime_rate_holidays](hr_timesheet_overtime_rate_holidays/) | 12.0.1.0.0 | [![carmenbianca](https://github.com/carmenbianca.png?size=30px)](https://github.com/carmenbianca) | Don't apply overtime rates on timesheet lines created from a holiday
-[hr_timesheet_project_prevent_creation](hr_timesheet_project_prevent_creation/) | 12.0.1.0.0 | [![carmenbianca](https://github.com/carmenbianca.png?size=30px)](https://github.com/carmenbianca) | Prevent creation of projects and tasks from timesheets.
+[hr_timesheet_overtime_rate_holidays](hr_timesheet_overtime_rate_holidays/) | 12.0.1.0.0 | <a href='https://github.com/carmenbianca'><img src='https://github.com/carmenbianca.png' width='32' height='32' style='border-radius:50%;' alt='carmenbianca'/></a> | Don't apply overtime rates on timesheet lines created from a holiday
+[hr_timesheet_project_prevent_creation](hr_timesheet_project_prevent_creation/) | 12.0.1.0.0 | <a href='https://github.com/carmenbianca'><img src='https://github.com/carmenbianca.png' width='32' height='32' style='border-radius:50%;' alt='carmenbianca'/></a> | Prevent creation of projects and tasks from timesheets.
 [hr_timesheet_search_all_tasks](hr_timesheet_search_all_tasks/) | 12.0.1.0.0 |  | Allow to search through all tasks in a timesheet line
 [hr_timesheet_sheet_current](hr_timesheet_sheet_current/) | 12.0.1.0.0 |  | Allow to access the current timesheet sheet directly from the menu
 [hr_timesheet_sheet_prefill](hr_timesheet_sheet_prefill/) | 12.0.1.1.0 |  | Prefill a timesheet sheet with daily timesheets
-[hr_timesheet_sheet_prefill_multi](hr_timesheet_sheet_prefill_multi/) | 12.0.1.0.0 | [![carmenbianca](https://github.com/carmenbianca.png?size=30px)](https://github.com/carmenbianca) | Allow duplicates in prefill templates.
+[hr_timesheet_sheet_prefill_multi](hr_timesheet_sheet_prefill_multi/) | 12.0.1.0.0 | <a href='https://github.com/carmenbianca'><img src='https://github.com/carmenbianca.png' width='32' height='32' style='border-radius:50%;' alt='carmenbianca'/></a> | Allow duplicates in prefill templates.
 [hr_timesheet_sheet_tag](hr_timesheet_sheet_tag/) | 12.0.1.0.0 |  | Tag your analytic line in the timesheet sheet view.
 [hr_timesheet_tag](hr_timesheet_tag/) | 12.0.1.0.0 |  | Tag your timesheet activity.
 [hr_timesheet_task_change_project](hr_timesheet_task_change_project/) | 12.0.1.0.1 |  | Allow to change the project of a timesheet of a task.
